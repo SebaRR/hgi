@@ -1,3 +1,4 @@
+from hgi_users.models import Client
 from hgi_users.models import User
 from hgi_users.models import UserToken
 from rest_framework import serializers
@@ -63,3 +64,10 @@ class UserTokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserToken
         fields = ('user', 'token', 'validation', 'recovery')
+
+class ClientsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Client
+        fields = ('id', 'business_name', 'address', 'commune', 'activity', 'rut','phone','country','active','contact','region','city',)
+        read_only_fields = ('created_at', 'updated_at',)
