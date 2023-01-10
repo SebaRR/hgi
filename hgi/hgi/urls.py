@@ -15,7 +15,7 @@ slashless_router = routers.SimpleRouter(trailing_slash=False)
 slashless_router.registry = router.registry[:]
 
 urlpatterns = [
-
+    
     re_path(r"^", include(router.urls)),
     path('admin/', admin.site.urls),
     path('create_user', user_view.register, name='register'),
