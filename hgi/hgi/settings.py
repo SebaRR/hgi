@@ -89,12 +89,22 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'hgi_db', 
+        'NAME': 'railway', 
         'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
+        'PASSWORD': 'fpmvBvSjVUuzRaMlwzWF',
+        'HOST': 'containers-us-west-134.railway.app', 
+        'PORT': '7391',
     }
+    
+    #'default': {
+    #    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #    'NAME': 'hgi_db', 
+    #    'USER': 'postgres',
+    #    'PASSWORD': 'admin',
+    #    'HOST': '127.0.0.1', 
+    #    'PORT': '5432',
+    #}
+    
 }
 
 
