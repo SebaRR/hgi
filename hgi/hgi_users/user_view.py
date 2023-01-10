@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from json.decoder import JSONDecodeError
 from django.http.response import JsonResponse
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 
 
 
@@ -21,7 +21,7 @@ from rest_framework import viewsets
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     authentication_classes = ()
-    permission_classes = []
+    permission_classes = [permissions.AllowAny,]
     serializer_class = UserSerializer
     http_method_names = ["get", "patch", "delete"]
 
