@@ -1,6 +1,7 @@
 asgiref==3.6.0
 Command==0.1.0
 Django==3.2.16
+django-cors-headers==3.13.0
 djangorestframework==3.14.0
 drf-flex-fields==1.0.0
 gunicorn==20.1.0
