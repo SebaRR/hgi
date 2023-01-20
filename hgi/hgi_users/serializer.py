@@ -1,3 +1,4 @@
+from hgi_users.models import Country
 from hgi_users.models import Client
 from hgi_users.models import User
 from hgi_users.models import UserToken
@@ -14,7 +15,7 @@ class CreateUserSerializer(FlexFieldsModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'is_superuser', 'position',
                   'first_name', 'first_last_name', 'second_last_name','active',
-                  'password', 'created_at', 'updated_at', 'phone_number', 'rut')
+                  'password', 'created_at', 'updated_at', 'phone_number', 'rut', 'codigo',)
         read_only_fields = ('created_at', 'updated_at',)
 
     def create(self, validated_data):
@@ -38,8 +39,7 @@ class CreateUserSerializer(FlexFieldsModelSerializer):
 
     def new_token(self):
         Token.objects.filter(user=self.instance).delete()
-
-        
+   
 
 class UserSerializer(FlexFieldsModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -48,7 +48,7 @@ class UserSerializer(FlexFieldsModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'is_superuser', 'position',
                   'first_name', 'first_last_name', 'second_last_name','active',
-                  'password', 'created_at', 'updated_at', 'phone_number', 'rut')
+                  'password', 'created_at', 'updated_at', 'phone_number', 'rut', 'codigo')
         read_only_fields = ('created_at', 'updated_at',)
     
     def get_token(self):
@@ -60,14 +60,19 @@ class UserSerializer(FlexFieldsModelSerializer):
 
 
 class UserTokenSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserToken
         fields = ('user', 'token', 'validation', 'recovery')
 
-class ClientsSerializer(serializers.ModelSerializer):
 
+class ClientsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = ('id', 'business_name', 'address', 'commune', 'activity', 'rut','phone','country','active','contact','region','city',)
         read_only_fields = ('created_at', 'updated_at',)
+    
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = '__all__'

@@ -2,7 +2,10 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class User(AbstractUser):
-
+    type_choices = [
+        ('Empleado', 'Empleado'),
+        ('Usuario', 'Usuario'),
+    ]
     username = models.CharField(max_length=30, null=True, unique=True)
     email = models.EmailField(blank=False, unique=True)
     first_name = models.CharField(max_length=30)
@@ -13,6 +16,10 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     rut = models.CharField(max_length=15, null=False)
     active = models.BooleanField(default=True)
+
+    #Datos de empleado
+    codigo = models.CharField(max_length=20, null=True, blank=True)
+
 
     updated_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -61,6 +68,18 @@ class City(models.Model):
         return self.name
 
 
+class Country(models.Model):
+
+    name = models.CharField(max_length=80)
+    iso = models.SmallIntegerField()
+    iso2 = models.CharField(max_length=2)
+    iso3 = models.CharField(max_length=3)
+
+    def __str__(self):
+        return self.name
+
+
+
 class Client(models.Model):
     country_choices = [('Chile', 'Chile'),
         ('Argentina', 'Argentina'),]
@@ -72,7 +91,7 @@ class Client(models.Model):
     activity = models.CharField(max_length=100)
     rut = models.CharField(max_length=20)
     phone = models.CharField(max_length=20)
-    country = models.CharField(max_length=20,choices=country_choices,default='Chile',)
+    country = models.CharField(max_length=20,choices=country_choices, default='Chile',)
     active = models.BooleanField(default=True)
 
     contact = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -82,5 +101,3 @@ class Client(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
-    

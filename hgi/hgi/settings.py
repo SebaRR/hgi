@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'hgi_users',
+    'hgi_ventas',
+    'hgi_static',
 ]
 
 MIDDLEWARE = [
@@ -89,23 +91,24 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway', 
-        'USER': 'postgres',
-        'PASSWORD': 'fpmvBvSjVUuzRaMlwzWF',
-        'HOST': 'containers-us-west-134.railway.app', 
-        'PORT': '7391',
-    }
     
     #'default': {
     #    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #    'NAME': 'hgi_db', 
+    #    'NAME': 'railway', 
     #    'USER': 'postgres',
-    #    'PASSWORD': 'admin',
-    #    'HOST': '127.0.0.1', 
-    #    'PORT': '5432',
+    #    'PASSWORD': 'fpmvBvSjVUuzRaMlwzWF',
+    #    'HOST': 'containers-us-west-134.railway.app', 
+    #    'PORT': '7391',
     #}
+    
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'hgi_db', 
+        'USER': 'postgres',
+        'PASSWORD': 'admin',
+        'HOST': '127.0.0.1', 
+        'PORT': '5432',
+    }
     
 }
 
