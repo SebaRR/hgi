@@ -55,7 +55,7 @@ class OrdenCompra(models.Model):
     autorizacion_res = models.IntegerField() #user R
 
     proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True)
-    estado = models.ForeignKey(EstadoOC, on_delete=models.SET_NULL, null=True) # tabla -> Nula, Aplicada, Proveedor, compras, VB OFC, Autorizar, Ingresado, Rechazada
+    estado = models.ForeignKey(EstadoOC, on_delete=models.SET_NULL, null=True) 
     forma_pago = models.ForeignKey(TipoPago, on_delete=models.SET_NULL, null=True)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
     emisor = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="emisor_oc", null=True)  # emisor -> la necesita

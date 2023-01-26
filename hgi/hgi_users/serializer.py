@@ -1,7 +1,5 @@
-from hgi_users.models import Country
-from hgi_users.models import Client
-from hgi_users.models import User
-from hgi_users.models import UserToken
+
+from hgi_users.models import Country, City, Proveedor, Region, Client, User, UserToken
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_flex_fields import FlexFieldsModelSerializer
@@ -75,4 +73,22 @@ class ClientsSerializer(serializers.ModelSerializer):
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
+        fields = '__all__'
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = '__all__'
+
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = '__all__'
+
+
+class ProveedorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Proveedor
         fields = '__all__'

@@ -63,9 +63,9 @@ class Contrato(models.Model):
     mon = models.IntegerField(null=False) #valor de presupuesto -> ppto prm
     pro = models.IntegerField(null=False) #valor de presupuesto -> ppto pro
     
-    estado = models.ForeignKey(EstadoContrato, on_delete=models.SET_NULL, null=True) #id de estado mae_estado
-    tipo = models.ForeignKey(TipoContrato, on_delete=models.SET_NULL, null=True) #relacion tipo(construccion, habilitacion, remodelacion, montaje, construccion modular)
-    clasificacion = models.ForeignKey(ClasiContrato, on_delete=models.SET_NULL, null=True) # relacion -> tipos(edificacion, retail, educacional, industrial, obras civiles)
+    estado = models.ForeignKey(EstadoContrato, on_delete=models.SET_NULL, null=True)
+    tipo = models.ForeignKey(TipoContrato, on_delete=models.SET_NULL, null=True) 
+    clasificacion = models.ForeignKey(ClasiContrato, on_delete=models.SET_NULL, null=True)
     obra = models.ForeignKey(Obra, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(User, related_name='user_responsable', on_delete=models.SET_NULL, null=True)
     administrador = models.ForeignKey(User, related_name='user_administrador', on_delete=models.SET_NULL, null=True)
@@ -78,7 +78,7 @@ class Contrato(models.Model):
 
     inicio = models.DateTimeField(auto_now_add=True, null=False)
     termino = models.DateTimeField(null=True)
-
+    
 
 class TipoPresupuesto(models.Model):
 

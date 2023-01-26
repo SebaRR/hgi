@@ -1,5 +1,6 @@
+
 from hgi_ventas.models import Presupuesto
-from hgi_static.models import Contrato, Obra, TipoPresupuesto
+from hgi_static.models import Contrato, Obra, TipoPresupuesto, ClasiContrato, EstadoContrato, EstadoOC, Moneda, TipoContrato, TipoPago
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 
@@ -41,4 +42,40 @@ class ObraSerializer(serializers.ModelSerializer):
 class TipoPresupuestoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoPresupuesto
+        fields = '__all__'
+
+
+class ClasiContratoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClasiContrato
+        fields = '__all__'
+
+
+class TipoContratoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoContrato
+        fields = '__all__'
+
+
+class EstadoContratoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EstadoContrato
+        fields = '__all__'
+
+
+class TipoPagoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoPago
+        fields = '__all__'
+
+
+class MonedaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Moneda
+        fields = '__all__'
+
+        
+class EstadoOCSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EstadoOC
         fields = '__all__'
