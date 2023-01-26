@@ -1,18 +1,105 @@
 from django.db import models
-from hgi_static.models import Contrato, TipoPresupuesto
-from hgi_users.models import User
+from hgi_static.models import Contrato, TipoPresupuesto, TipoPago, Moneda, EstadoOC
+from hgi_users.models import User, Proveedor
 
 
 class Presupuesto(models.Model):
 
     glosa = models.CharField(max_length=50, null=False)
-    pre = models.BigIntegerField(null=False)
-    prm = models.BigIntegerField(null=False) #Cobrar
-    pro = models.BigIntegerField(null=False) #Gastar - rige ordenes de compra
+    pre = models.IntegerField(null=False)
+    prm = models.IntegerField(null=False) #Cobrar
+    pro = models.IntegerField(null=False) #Gastar - rige ordenes de compra
     ing = models.IntegerField(null=False)
     ccp = models.CharField(max_length=10, null=False)
 
     tipo = models.ForeignKey(TipoPresupuesto, on_delete=models.SET_NULL, null=True)
-    fecha = models.DateTimeField(auto_now_add=True)
+    
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True)
+
+
+class TipoOC(models.Model):
+
+    descripcion = models.CharField(max_length=50, null=False)
+    texto = models.CharField(max_length=400, null=False)
+    codigo = models.IntegerField()
+    sub = models.BooleanField()
+    rem = models.BooleanField()
+    pro = models.IntegerField()
+    pag = models.IntegerField()
+    arr = models.BooleanField()
+    rah = models.BooleanField()
+    cch = models.BooleanField()
+    man = models.BooleanField()
+    ope = models.IntegerField()
+    nco = models.CharField(max_length=3, null=False)
+    col = models.CharField(max_length=6, null=False)
+    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+
+
+class OrdenCompra(models.Model):
+
+    glosa = models.CharField(max_length=500, null=False)
+    descuento_general = models.IntegerField()
+    observacion = models.CharField(max_length=500, null=False)
+    ref_oc = models.CharField(max_length=20, null=False)
+
+    direccion_despacho = models.CharField(max_length=60, null=False) #parte del contrato - editable
+
+    ate_oc = models.CharField(max_length=50, null=False) #parte del proveedor
+    mail = models.CharField(max_length=40, null=False) #parte del proveedor - editable
+    mail2 = models.CharField(max_length=40, null=False) #parte del proveedor - editable
+
+    autorizacion_adm = models.IntegerField() #user A
+    autorizacion_res = models.IntegerField() #user R
+
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True)
+    estado = models.ForeignKey(EstadoOC, on_delete=models.SET_NULL, null=True) # tabla -> Nula, Aplicada, Proveedor, compras, VB OFC, Autorizar, Ingresado, Rechazada
+    forma_pago = models.ForeignKey(TipoPago, on_delete=models.SET_NULL, null=True)
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
+    emisor = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="emisor_oc", null=True)  # emisor -> la necesita
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="creador_oc", null=True) # quien la hizo
+    tipo = models.ForeignKey(TipoOC, on_delete=models.SET_NULL, null=True)
+    moneda = models.ForeignKey(Moneda, on_delete=models.SET_NULL, null=True)
+
+    fecha_ingreso = models.DateTimeField(auto_now_add=True)
+    fecha_despacho = models.DateTimeField(auto_now_add=True) # fecha creacion - editable
+    fecha = models.DateTimeField(auto_now_add=True) # fecha creacion - editable
+
+
+class UnidadProducto(models.Model):
+
+    nombre = models.CharField(max_length=10, null=False)
+    tiempo = models.CharField(max_length=5, null=True, blank=True)
+    rfa = models.CharField(max_length=10, null=True, blank=True)
+
+
+class ProductoOC(models.Model):
+
+    producto = models.CharField(max_length=150, null=False)
+    cantidad = models.FloatField()
+    precio = models.FloatField()
+    descuento = models.FloatField()
+    par = models.IntegerField() # partida?
+    mat = models.IntegerField() # si tiene "partida" tiene mat -> material?
+    afe = models.IntegerField() 
+    ing = models.IntegerField() #ingreso?
+    cpp = models.CharField(max_length=15, null=True, blank=True)
+    lso = models.IntegerField() #si no tiene ing tiene esto
+    doc = models.IntegerField() # 0
+    car = models.IntegerField() # 0
+    moc = models.IntegerField() # 0 
+    ant = models.IntegerField() # 0
+
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    unidad = models.ForeignKey(UnidadProducto, on_delete=models.SET_NULL, null=True)
+    oc = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE, null=False)
+
+    fecha_ingreso = models.DateTimeField(auto_now_add=True)
+    fecha_termino = models.DateTimeField(null=True)
+
+    
+
+    
+#linpreobra -> ccp

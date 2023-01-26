@@ -1,6 +1,16 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+class CargoUser(models.Model):
+    
+    nombre = models.CharField(max_length=50, null=False)
+    por_contrato = models.BooleanField(default=True)
+    ver_oc = models.BooleanField(default=False)
+    modificar_oc = models.BooleanField(default=False)
+    ver_vb = models.BooleanField(default=False)
+    modificar_vb = models.BooleanField(default=False)
+
+
 class User(AbstractUser):
     type_choices = [
         ('Empleado', 'Empleado'),
@@ -12,14 +22,14 @@ class User(AbstractUser):
     first_last_name = models.CharField(max_length=30, null=True)
     second_last_name = models.CharField(max_length=30, null=True)
 
-    position = models.CharField(max_length=100, null=True, blank=True)
+    
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     rut = models.CharField(max_length=15, null=False)
     active = models.BooleanField(default=True)
 
     #Datos de empleado
     codigo = models.CharField(max_length=20, null=True, blank=True)
-
+    position = models.ForeignKey(CargoUser, on_delete=models.SET_NULL, null=True)
 
     updated_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -101,3 +111,25 @@ class Client(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+
+class Proveedor(models.Model):
+    
+    rut = models.CharField(max_length=20)
+    rs = models.CharField(max_length=50)
+    direccion = models.CharField(max_length=60)
+    telefono = models.CharField(max_length=10)
+    web = models.CharField(max_length=25)
+    contacto = models.CharField(max_length=50)
+    mail_contacto = models.CharField(max_length=40)
+    mail2_contacto = models.CharField(max_length=40)
+    nombre = models.CharField(max_length=50)
+    credito = models.IntegerField()
+    cuenta = models.CharField(max_length=20)
+    activo = models.BooleanField(default=True)
+
+    ciudad = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True)
+    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
+    pais = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True)
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    fecha_creado = models.DateTimeField(auto_now_add=True)
+    fecha_editado = models.DateTimeField(null=True, blank=True)

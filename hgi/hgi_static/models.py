@@ -1,30 +1,9 @@
+from datetime import datetime
 from django.db import models
 
-from hgi_users.models import City, Region, User
+from hgi_users.models import Client, User
+
 """
-class Proveedor(models.Model):
-    
-    rut = models.CharField(max_length=20)
-    rs = models.CharField(max_length=50)
-    direccion = models.CharField(max_length=60)
-    ciudad = models.ForeignKey(City, null=True, blank=True)
-    region = models.ForeignKey(Region, null=True, blank=True)
-    pais = models.ForeignKey(Pais, null=False)
-    telefono = models.CharField(max_length=10)
-    web = models.CharField(max_length=25)
-    contacto = models.CharField(max_length=50)
-    mail_contacto = models.CharField(max_length=40)
-    usuario = models.CharField(max_length=50)
-    mail2_contacto = models.CharField(max_length=40)
-    nombre = models.CharField(max_length=50)
-    credito = models.IntegerField()
-    cuenta = models.CharField(max_length=20)
-    activo = models.BooleanField(default=True)
-
-    fecha_creado = models.DateTimeField(auto_now_add=True)
-    fecha_editado = models.DateTimeField(null=True, blank=True)
-
-
 class Banco(models.Model):
 
     codigo = models.CharField(max_length=5)
@@ -37,43 +16,66 @@ class Obra(models.Model):
 
     codigo = models.CharField(max_length=6, null=False)
     nombre = models.CharField(max_length=50, null=False)
-    act = models.CharField(max_length=2, null=False, default='Si')
-    asu = models.CharField(max_length=25, null=False)
+    activo = models.BooleanField(default=True)
+    creador = models.CharField(max_length=25, null=False) 
+    cliente = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
+    fecha = models.DateTimeField(auto_now_add=True, null=True)
+
+
+class ClasiContrato(models.Model):
+
+    nombre = models.CharField(max_length=20, null=False)
+    abreviatura = models.CharField(max_length=5, null=True)
+
+
+class TipoContrato(models.Model):
+
+    nombre = models.CharField(max_length=20, null=False)
+    abreviatura = models.CharField(max_length=5, null=True)
+
+
+class EstadoContrato(models.Model):
+
+    nombre = models.CharField(max_length=20, null=False)
+    abreviatura = models.CharField(max_length=5, null=True)
 
 
 class Contrato(models.Model):
 
     codigo = models.CharField(max_length=9, null=False)
-    estado = models.IntegerField(null=False)
     nombre = models.CharField(max_length=50, null=False)
     direccion = models.CharField(max_length=50, null=False)
-    act =  models.CharField(max_length=2, null=False, default='Si')
-    usu = models.CharField(max_length=25, null=False)
-    par = models.BooleanField(null=False, default=0)
-    mat = models.BooleanField(null=False, default=0)
-    mau = models.IntegerField(null=False, default=0)
-    auo = models.BooleanField(null=False, default=0)
-    mon = models.BigIntegerField(null=False)
-    proa = models.BooleanField(null=False, default=0)
-    oc = models.BooleanField(null=False, default=0)
-    pro = models.BigIntegerField(null=False)
-    vis = models.BooleanField(null=False, default=0)
+    activo =  models.BooleanField(default=True)
+
+    par = models.BooleanField(default=False) #cargo por partida
+    mat = models.BooleanField(default=False) #cargo por recurso
+    mau = models.BooleanField(default=False) #autorizacion oc
+    auo = models.BooleanField(default=False) #autorizar dcs de obra, no aplica (doctos = factura)
+    proa = models.BooleanField(default=False) #controlar disponible
+    oc = models.BooleanField(default=False) #oc obligatorio (factura) doctos con oc
+    vis = models.BooleanField(default=False) #visado doctos (factura)
     uf = models.FloatField(null=False)
-    sa = models.IntegerField(default=0)
-    m2 = models.IntegerField()
-    peso = models.IntegerField()
-    clasificacion = models.IntegerField()
-    tipo = models.CharField(max_length=100, null=False)
-    ccp = models.IntegerField(default=0)
+    sa = models.IntegerField(default=0) #controla sa (no aun)
+    m2 = models.IntegerField(null=True) #dato
+    peso = models.IntegerField(null=True) #dato
+    ccp = models.IntegerField(default=0) #ccp por venta (dato) booleano
+
+    mon = models.IntegerField(null=False) #valor de presupuesto -> ppto prm
+    pro = models.IntegerField(null=False) #valor de presupuesto -> ppto pro
     
+    estado = models.ForeignKey(EstadoContrato, on_delete=models.SET_NULL, null=True) #id de estado mae_estado
+    tipo = models.ForeignKey(TipoContrato, on_delete=models.SET_NULL, null=True) #relacion tipo(construccion, habilitacion, remodelacion, montaje, construccion modular)
+    clasificacion = models.ForeignKey(ClasiContrato, on_delete=models.SET_NULL, null=True) # relacion -> tipos(edificacion, retail, educacional, industrial, obras civiles)
     obra = models.ForeignKey(Obra, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(User, related_name='user_responsable', on_delete=models.SET_NULL, null=True)
     administrador = models.ForeignKey(User, related_name='user_administrador', on_delete=models.SET_NULL, null=True)
+    visitador = models.ForeignKey(User, related_name='user_visitador', on_delete=models.SET_NULL, null=True)
     of_tecnica = models.ForeignKey(User, related_name='user_of_tecnica', on_delete=models.SET_NULL, null=True)
     compras = models.ForeignKey(User, related_name='user_compras', on_delete=models.SET_NULL, null=True)
     administrativo = models.ForeignKey(User, related_name='user_administrativo', on_delete=models.SET_NULL, null=True)
-    visitador = models.ForeignKey(User, related_name='user_visitador', on_delete=models.SET_NULL, null=True)
     prevencionista = models.ForeignKey(User, related_name='user_prevencionista', on_delete=models.SET_NULL, null=True)
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
     inicio = models.DateTimeField(auto_now_add=True, null=False)
     termino = models.DateTimeField(null=True)
 
@@ -84,5 +86,33 @@ class TipoPresupuesto(models.Model):
     diminutivo = models.CharField(max_length=3, null=False)
     operacion = models.IntegerField(null=False)
     orden = models.IntegerField(null=False)
-    usuario = models.ForeignKey(User, related_name='user', on_delete=models.SET_NULL, null=True)
-    
+    creador = models.ForeignKey(User, related_name='user', on_delete=models.SET_NULL, null=True)
+
+
+class TipoPago(models.Model):
+
+    descripcion = models.CharField(max_length=50)
+    dias = models.IntegerField()
+    orden = models.IntegerField()
+
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) 
+
+
+class Moneda(models.Model):
+
+    descripcion = models.CharField(max_length=20, null=False)
+    simbolo = models.CharField(max_length=3, null=False)
+    dec = models.IntegerField()
+
+
+class EstadoOC(models.Model):
+
+    nombre = models.CharField(max_length=20, null=False)
+    orden = models.IntegerField()
+
+
+
+
+#tabla de registro de cambios de estado en un contrato 
+
+#gestion proa -> 
