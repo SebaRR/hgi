@@ -21,7 +21,7 @@ class Presupuesto(models.Model):
 class TipoOC(models.Model):
 
     descripcion = models.CharField(max_length=50, null=False)
-    texto = models.CharField(max_length=400, null=False)
+    texto = models.CharField(max_length=1000, null=False)
     codigo = models.IntegerField()
     sub = models.BooleanField()
     rem = models.BooleanField()
