@@ -25,3 +25,5 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
         ppto = self.get_object()
         data_ppto = self.serializer_class(ppto).data
         return JsonResponse({"orden_compra":data_ppto}, status=200)
+    
+    

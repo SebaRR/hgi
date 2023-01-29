@@ -28,4 +28,4 @@ class PresupuestoViewSet(viewsets.ModelViewSet):
         data_ppto = self.serializer_class(ppto).data
         tipo = TipoPresupuesto.objects.get(id=data_ppto['tipo'])
         data_ppto['tipo'] = TipoPresupuestoSerializer(tipo).data
-        return JsonResponse({"user":data_ppto}, status=200)
+        return JsonResponse({"presupuesto":data_ppto}, status=200)

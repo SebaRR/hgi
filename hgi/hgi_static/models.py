@@ -60,8 +60,8 @@ class Contrato(models.Model):
     peso = models.IntegerField(null=True) #dato
     ccp = models.IntegerField(default=0) #ccp por venta (dato) booleano
 
-    mon = models.IntegerField(null=False) #valor de presupuesto -> ppto prm
-    pro = models.IntegerField(null=False) #valor de presupuesto -> ppto pro
+    mon = models.IntegerField(null=True) #valor de presupuesto -> ppto prm
+    pro = models.IntegerField(null=True) #valor de presupuesto -> ppto pro
     
     estado = models.ForeignKey(EstadoContrato, on_delete=models.SET_NULL, null=True)
     tipo = models.ForeignKey(TipoContrato, on_delete=models.SET_NULL, null=True) 

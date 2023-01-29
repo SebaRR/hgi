@@ -28,4 +28,4 @@ class ContratoViewSet(viewsets.ModelViewSet):
         data_contrato = self.serializer_class(contrato).data
         ppto = Presupuesto.objects.filter(contrato=data_contrato['id'])
         data_contrato['presupuestos'] = PresupuestoSerializer(ppto, many=True).data
-        return JsonResponse({"user":data_contrato}, status=200)
+        return JsonResponse({"contrato":data_contrato}, status=200)
