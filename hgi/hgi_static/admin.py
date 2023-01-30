@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hgi_static.models import Contrato, Obra, TipoPresupuesto, ClasiContrato, EstadoContrato, EstadoOC, Moneda, TipoContrato, TipoPago
+from hgi_static.models import Contrato, Obra, TipoPresupuesto, ClasiContrato, EstadoContrato, EstadoOC, Moneda, TipoContrato, TipoPago, EstadoObra
 
 
 
@@ -12,6 +12,6 @@ admin.site.register(EstadoContrato)
 admin.site.register(TipoPago)
 admin.site.register(Moneda)
 admin.site.register(EstadoOC)
-
+admin.site.register(EstadoObra)
 
 
