@@ -17,9 +17,19 @@ class TipoOCSerializer(serializers.ModelSerializer):
 
 
 class OrdenCompraSerializer(serializers.ModelSerializer):
+    total_oc = serializers.SerializerMethodField()
+
     class Meta:
         model = OrdenCompra
         fields = '__all__'
+    
+    def get_total_oc(self, instance):
+        total = 0
+        productos = ProductoOC.objects.filter(oc=instance.id)
+        for producto in productos:
+            total += producto.precio * producto.cantidad
+        return total
+
 
 
 class UnidadProductoSerializer(serializers.ModelSerializer):

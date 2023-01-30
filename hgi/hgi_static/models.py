@@ -10,6 +10,9 @@ class Banco(models.Model):
     nombre = models.CharField(max_length=50)
     logo = models.CharField(max_length=50, null=True, blank=True)
 """
+class EstadoObra(models.Model):
+
+    nombre = models.CharField(max_length=20, null=False)
 
 
 class Obra(models.Model):
@@ -17,9 +20,11 @@ class Obra(models.Model):
     codigo = models.CharField(max_length=6, null=False)
     nombre = models.CharField(max_length=50, null=False)
     activo = models.BooleanField(default=True)
-    creador = models.CharField(max_length=25, null=False) 
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     cliente = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
+    estado = models.ForeignKey(EstadoObra, on_delete=models.SET_NULL, null=True)
     fecha = models.DateTimeField(auto_now_add=True, null=True)
+
 
 
 class ClasiContrato(models.Model):

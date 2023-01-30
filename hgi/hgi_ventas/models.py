@@ -60,7 +60,7 @@ class OrdenCompra(models.Model):
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
     emisor = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="emisor_oc", null=True)  # emisor -> la necesita
     creador = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="creador_oc", null=True) # quien la hizo
-    tipo = models.ForeignKey(TipoOC, on_delete=models.SET_NULL, null=True)
+    tipo = models.ForeignKey(TipoOC, on_delete=models.SET_NULL, null=True, default=6)
     moneda = models.ForeignKey(Moneda, on_delete=models.SET_NULL, null=True)
 
     fecha_ingreso = models.DateTimeField(auto_now_add=True)
