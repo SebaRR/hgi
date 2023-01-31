@@ -1,5 +1,6 @@
 from django.utils import timezone
 from django.shortcuts import render
+from hgi_users.models import User
 from hgi_users.serializer import ClientsSerializer
 from hgi_users.models import Client
 from hgi_users.serializer import UserSerializer
@@ -14,7 +15,7 @@ import json
 from json.decoder import JSONDecodeError
 from django.http.response import JsonResponse
 from rest_framework import viewsets
-
+from django.core.paginator import Paginator
 
 
 
@@ -30,6 +31,8 @@ class ClientViewSet(viewsets.ModelViewSet):
         self.queryset = Client.objects.all()
         client = self.get_object()
         data_client = self.serializer_class(client).data
+        contact = User.objects.get(id=data_client['contact'])
+        data_client['contact_name'] = contact.short_name()
         return JsonResponse({"client":data_client}, status=200)
 
 
@@ -46,3 +49,24 @@ class ClientViewSet(viewsets.ModelViewSet):
             return JsonResponse({"status_text": "Cliente editado con exito.", "client": data_client,},status=202)
         else:
             return JsonResponse({"status_text": str(serializer.errors)}, status=400)
+        
+    
+    def list(self, request):
+        clients = self.get_queryset()
+        pages = Paginator(clients.order_by('created_at').reverse(), 25)
+        out_pag = 1
+        total_pages = pages.num_pages
+        count_objects = pages.count
+        if self.request.query_params.keys():
+            if 'page' in self.request.query_params.keys():
+                page_asked = int(self.request.query_params['page'])
+                if page_asked in pages.page_range:
+                    out_pag = page_asked
+        clients_all = pages.page(out_pag).object_list
+        serializer = self.serializer_class(clients_all, many=True)
+        response_data = serializer.data
+        for client in response_data:
+            contact = User.objects.get(id=client['contact'])
+            client['contact_name'] = contact.short_name()
+        
+        return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
