@@ -1,5 +1,5 @@
 
-from hgi_users.models import Country, City, Proveedor, Region, Client, User, UserToken
+from hgi_users.models import Country, City, Proveedor, Region, Client, User, UserToken, CargoUser
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_flex_fields import FlexFieldsModelSerializer
@@ -91,4 +91,10 @@ class CitySerializer(serializers.ModelSerializer):
 class ProveedorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Proveedor
+        fields = '__all__'
+
+
+class CargoUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CargoUser
         fields = '__all__'

@@ -2,6 +2,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
+from hgi_users.cargo_user import CargoUserViewSet
+from hgi_ventas.partida_view import PartidaViewSet
 from hgi_static.estado_oc_view import EstadoOCViewSet
 from hgi_static.moneda_view import MonedaViewSet
 from hgi_static.tipo_pago_view import TipoPagoViewSet
@@ -46,8 +48,8 @@ router.register(r"estado_contrato", EstadoContratoViewSet)
 router.register(r"tipo_pago", TipoPagoViewSet)
 router.register(r"moneda", MonedaViewSet)
 router.register(r"estado_oc", EstadoOCViewSet)
-
-
+router.register(r"partida", PartidaViewSet)
+router.register(r"cargo_user", CargoUserViewSet)
 
 slashless_router = routers.SimpleRouter(trailing_slash=False)
 slashless_router.registry = router.registry[:]

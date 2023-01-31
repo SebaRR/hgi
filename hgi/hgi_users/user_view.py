@@ -30,11 +30,6 @@ class UserViewSet(viewsets.ModelViewSet):
         self.queryset = User.objects.all()
         user = self.get_object()
         data_user = self.serializer_class(user).data
-        if request.user.id == data_user["id"]:
-            if request.user.last_name is not None:
-                data_user["last_name"] = request.user.first_last_name
-            else:
-                data_user["last_name"] = " "
         return JsonResponse({"user":data_user}, status=200)
 
 

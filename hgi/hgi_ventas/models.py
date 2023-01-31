@@ -75,13 +75,26 @@ class UnidadProducto(models.Model):
     rfa = models.CharField(max_length=10, null=True, blank=True)
 
 
+class Partida(models.Model):
+
+    codigo = models.CharField(max_length=10, null=True, blank=True)
+    descripcion = models.CharField(max_length=90, null=True, blank=True)
+    total = models.IntegerField()
+    ing = models.IntegerField()
+
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True)
+
+    inicio = models.DateTimeField(auto_now_add=True)
+    termino = models.DateTimeField(null=True)
+
+
 class ProductoOC(models.Model):
 
     producto = models.CharField(max_length=150, null=False)
     cantidad = models.FloatField()
     precio = models.FloatField()
     descuento = models.FloatField()
-    par = models.IntegerField() # partida?
     mat = models.IntegerField() # si tiene "partida" tiene mat -> material?
     afe = models.IntegerField() 
     ing = models.IntegerField() #ingreso?
@@ -92,6 +105,7 @@ class ProductoOC(models.Model):
     moc = models.IntegerField() # 0 
     ant = models.IntegerField() # 0
 
+    partida = models.ForeignKey(Partida, on_delete=models.SET_NULL, null=True)
     creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     unidad = models.ForeignKey(UnidadProducto, on_delete=models.SET_NULL, null=True)
     oc = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE, null=False)
@@ -99,7 +113,8 @@ class ProductoOC(models.Model):
     fecha_ingreso = models.DateTimeField(auto_now_add=True)
     fecha_termino = models.DateTimeField(null=True)
 
-    
+
+
 
     
 #linpreobra -> ccp

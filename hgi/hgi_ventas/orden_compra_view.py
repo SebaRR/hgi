@@ -93,8 +93,6 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
         else:
             return JsonResponse ({'status_text':'No usaste token'}, status=403)
 
-        contrato = Contrato.objects.get(id=data['contrato'])
-        contrato_data = ContratoSerializer(contrato).data
         data['creador'] = user
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
