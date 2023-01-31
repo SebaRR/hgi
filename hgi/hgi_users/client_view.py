@@ -34,23 +34,7 @@ class ClientViewSet(viewsets.ModelViewSet):
         contact = User.objects.get(id=data_client['contact'])
         data_client['contact_name'] = contact.short_name()
         return JsonResponse({"client":data_client}, status=200)
-
-
-    def partial_update(self, request, pk, *args, **kwargs):
-        self.queryset = Client.objects.all()
-        client = self.get_object()
-        edited = timezone.now()
-        client.updated_at = edited
-        client.save()
-        serializer = self.serializer_class(client, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            data_client = serializer.data
-            return JsonResponse({"status_text": "Cliente editado con exito.", "client": data_client,},status=202)
-        else:
-            return JsonResponse({"status_text": str(serializer.errors)}, status=400)
         
-    
     def list(self, request):
         clients = self.get_queryset()
         pages = Paginator(clients.order_by('created_at').reverse(), 25)
@@ -68,5 +52,18 @@ class ClientViewSet(viewsets.ModelViewSet):
         for client in response_data:
             contact = User.objects.get(id=client['contact'])
             client['contact_name'] = contact.short_name()
-        
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
+
+    def partial_update(self, request, pk, *args, **kwargs):
+        self.queryset = Client.objects.all()
+        client = self.get_object()
+        edited = timezone.now()
+        client.updated_at = edited
+        client.save()
+        serializer = self.serializer_class(client, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            data_client = serializer.data
+            return JsonResponse({"status_text": "Cliente editado con exito.", "client": data_client,},status=202)
+        else:
+            return JsonResponse({"status_text": str(serializer.errors)}, status=400)    
