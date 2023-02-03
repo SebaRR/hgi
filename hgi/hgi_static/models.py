@@ -66,7 +66,7 @@ class Contrato(models.Model):
     ccp = models.IntegerField(default=0) #ccp por venta (dato) booleano
     
     estado = models.ForeignKey(EstadoContrato, on_delete=models.SET_NULL, null=True)
-    tipo = models.ForeignKey(TipoContrato, on_delete=models.SET_NULL, null=True) 
+    tipo = models.ForeignKey(TipoContrato, on_delete=models.SET_NULL, null=True, default=6) 
     clasificacion = models.ForeignKey(ClasiContrato, on_delete=models.SET_NULL, null=True)
     obra = models.ForeignKey(Obra, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(User, related_name='user_responsable', on_delete=models.SET_NULL, null=True)

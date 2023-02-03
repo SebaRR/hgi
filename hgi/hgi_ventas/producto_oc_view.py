@@ -12,6 +12,8 @@ import json
 from json.decoder import JSONDecodeError
 from django.http.response import JsonResponse
 from rest_framework import viewsets, permissions
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 class ProductoOCViewSet(viewsets.ModelViewSet):
@@ -26,3 +28,38 @@ class ProductoOCViewSet(viewsets.ModelViewSet):
         ppto = self.get_object()
         data_ppto = self.serializer_class(ppto).data
         return JsonResponse({"producto_oc":data_ppto}, status=200)
+
+    def get_queryset(self):
+        self.get_queryset = ProductoOC.objects.all()
+        products = self.queryset
+
+        if 'partida' in self.request.query_params.keys():
+            partida = self.request.query_params['partida']
+            products = products.filter(partida = partida)
+
+        if 'oc' in self.request.query_params.keys():
+            oc = self.request.query_params['oc']
+            products = products.filter(oc = oc)
+        
+        if "search" in self.request.query_params.keys():
+            text_query = Q(description__contains=self.request.query_params["search"])
+            products = products.filter(text_query)
+            
+        return products
+
+    def list(self, request):
+        productos = self.get_queryset()
+        pages = Paginator(productos.order_by('fecha_ingreso').reverse(), 25)
+        out_pag = 1
+        total_pages = pages.num_pages
+        count_objects = pages.count
+        if self.request.query_params.keys():
+            if 'page' in self.request.query_params.keys():
+                page_asked = int(self.request.query_params['page'])
+                if page_asked in pages.page_range:
+                    out_pag = page_asked
+        productos_all = pages.page(out_pag).object_list
+        serializer = self.serializer_class(productos_all, many=True)
+        response_data = serializer.data
+        
+        return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)

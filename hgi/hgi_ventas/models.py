@@ -51,8 +51,8 @@ class OrdenCompra(models.Model):
     mail = models.CharField(max_length=40, null=False) #parte del proveedor - editable
     mail2 = models.CharField(max_length=40, null=False) #parte del proveedor - editable
 
-    autorizacion_adm = models.IntegerField() #user A
-    autorizacion_res = models.IntegerField() #user R
+    autorizacion_adm = models.BooleanField(default=False) #user A
+    autorizacion_res = models.BooleanField(default=False) #user R
 
     proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True)
     estado = models.ForeignKey(EstadoOC, on_delete=models.SET_NULL, null=True) 
@@ -80,7 +80,7 @@ class Partida(models.Model):
     codigo = models.CharField(max_length=10, null=True, blank=True)
     descripcion = models.CharField(max_length=90, null=True, blank=True)
     total = models.IntegerField()
-    ing = models.IntegerField()
+    ingresado = models.IntegerField()
 
     creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True)
@@ -112,6 +112,11 @@ class ProductoOC(models.Model):
 
     fecha_ingreso = models.DateTimeField(auto_now_add=True)
     fecha_termino = models.DateTimeField(null=True)
+
+    def total_precio(self):
+        total = self.cantidad * self.precio
+        descuento = (self.descuento * total)/100        
+        return (total - descuento)
 
 
 
