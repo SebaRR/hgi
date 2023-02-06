@@ -1,7 +1,13 @@
 from django.contrib import admin
 from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida, Recurso
 
-admin.site.register(Presupuesto)
+class PresupuestoAdmin(admin.ModelAdmin):
+    list_display = ["glosa", "prm", "pro", "tipo", "usuario", "contrato"]
+    class meta:
+        model = Presupuesto
+
+
+admin.site.register(Presupuesto, PresupuestoAdmin)
 admin.site.register(TipoOC)
 admin.site.register(OrdenCompra)
 admin.site.register(UnidadProducto)
