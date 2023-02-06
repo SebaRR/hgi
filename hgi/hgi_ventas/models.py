@@ -89,6 +89,14 @@ class Partida(models.Model):
     termino = models.DateTimeField(null=True)
 
 
+class Recurso(models.Model):
+
+    codigo = models.CharField(max_length=5, null=False)
+    descripcion = models.CharField(max_length=50, null=False)
+    imputable = models.BooleanField(default=True)
+    asociado = models.IntegerField() # asociado a otro recurso?
+
+
 class ProductoOC(models.Model):
 
     producto = models.CharField(max_length=150, null=False)
@@ -105,6 +113,7 @@ class ProductoOC(models.Model):
     moc = models.IntegerField() # 0 
     ant = models.IntegerField() # 0
 
+    recurso = models.ForeignKey(Recurso, on_delete=models.SET_NULL, null=True)
     partida = models.ForeignKey(Partida, on_delete=models.SET_NULL, null=True)
     creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     unidad = models.ForeignKey(UnidadProducto, on_delete=models.SET_NULL, null=True)
@@ -117,9 +126,3 @@ class ProductoOC(models.Model):
         total = self.cantidad * self.precio
         descuento = (self.descuento * total)/100        
         return (total - descuento)
-
-
-
-
-    
-#linpreobra -> ccp

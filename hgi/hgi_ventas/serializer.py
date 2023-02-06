@@ -1,5 +1,5 @@
 
-from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida
+from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida, Recurso
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 
@@ -46,4 +46,10 @@ class ProductoOCSerializer(serializers.ModelSerializer):
 class PartidaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partida
+        fields = '__all__'
+
+
+class RecursoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recurso
         fields = '__all__'
