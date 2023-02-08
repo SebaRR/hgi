@@ -1,5 +1,5 @@
 
-from hgi.utils import get_total_partidas
+from hgi.utils import get_total_partidas_APU
 from hgi_ventas.models import Partida
 from hgi_static.serializer import TipoPresupuestoSerializer
 from hgi_ventas.serializer import PresupuestoSerializer
@@ -70,7 +70,7 @@ class PresupuestoViewSet(viewsets.ModelViewSet):
         for presupuesto in presupuestos:
             contrato = Contrato.objects.get(id=presupuesto["contrato"])
             partidas = Partida.objects.filter(contrato=contrato)
-            presupuesto["total_partidas"], presupuesto["total_APU"] = get_total_partidas(partidas)
+            presupuesto["total_partidas"], presupuesto["total_APU"] = get_total_partidas_APU(partidas)
             presupuesto["n_partidas"] = partidas.count()
             tipo = TipoPresupuesto.objects.get(id=presupuesto['tipo'])
             presupuesto["name_contrato"] = contrato.nombre
