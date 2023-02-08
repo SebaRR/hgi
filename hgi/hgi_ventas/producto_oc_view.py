@@ -63,3 +63,16 @@ class ProductoOCViewSet(viewsets.ModelViewSet):
         response_data = serializer.data
         
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
+
+    def create(self, request):
+        try:
+            data = json.loads(request.body)
+        except JSONDecodeError as error:
+            return JsonResponse({'Request error': str(error)},status=400)
+        serializer = self.serializer_class(data = data)
+        if serializer.is_valid():
+            serializer.save()
+            producto_data = serializer.data
+            response = {'status_code': 201, 'producto_oc': producto_data}
+            return JsonResponse(response, status=201)
+        return JsonResponse({'status_text': str(serializer.errors)}, status=400)

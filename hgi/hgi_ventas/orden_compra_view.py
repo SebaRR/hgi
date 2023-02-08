@@ -1,4 +1,5 @@
 
+from hgi.utils import update_ingreso_partida
 from hgi_static.serializer import ContratoSerializer
 from hgi_static.models import Contrato
 from hgi.utils import get_user_from_usertoken, user_can_see_oc, can_accept_oc
@@ -118,6 +119,8 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
                     serializer = OrdenCompraSerializer(oc, data={"autorizacion_adm": True, "autorizacion_res": True, "estado": 7}, partial=True)
                     if serializer.is_valid():
                         serializer.save()
+                        if accepted:
+                            update_ingreso_partida(serializer.data)
                         return Response({'oc_data':serializer.data,'products':list_produtcs}, status=status.HTTP_202_ACCEPTED)
                     else:
                         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -128,11 +131,15 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
                 if can_accept:
                     if oc.autorizacion_res:
                         serializer = OrdenCompraSerializer(oc, data={"autorizacion_adm": True, "estado": 7}, partial=True)
+                        accepted = True
                     else:
                         serializer = OrdenCompraSerializer(oc, data={"autorizacion_adm": True}, partial=True)
+                        accepted = False
                     if serializer.is_valid():
                         serializer.save()
                         oc_data = serializer.data
+                        if accepted:
+                            update_ingreso_partida(oc_data)
                         return Response({'oc_data':oc_data,'products':list_produtcs}, status=status.HTTP_202_ACCEPTED)
                     else:
                         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -145,11 +152,15 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
                 if can_accept:
                     if oc.autorizacion_adm:
                         serializer = OrdenCompraSerializer(oc, data={"autorizacion_adm": True, "estado": 7}, partial=True)
+                        accepted = True
                     else:
                         serializer = OrdenCompraSerializer(oc, data={"autorizacion_res": True}, partial=True)
+                        accepted = False
                     if serializer.is_valid():
                         serializer.save()
                         oc_data = serializer.data
+                        if accepted:
+                            update_ingreso_partida(oc_data)
                         return Response({'oc_data':oc_data,'products':list_produtcs}, status=status.HTTP_202_ACCEPTED)
                     else:
                         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,5 +1,5 @@
 
-from hgi_ventas.models import Presupuesto
+from hgi_ventas.models import Presupuesto, Partida
 from hgi_static.models import Contrato, Obra, TipoPresupuesto, ClasiContrato, EstadoContrato, EstadoOC, Moneda, TipoContrato, TipoPago
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
@@ -32,6 +32,7 @@ class ContratoSerializer(serializers.ModelSerializer):
         except Presupuesto.DoesNotExist:
             return total
         return total
+
 
 class ObraSerializer(serializers.ModelSerializer):
     class Meta:

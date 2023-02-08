@@ -1,4 +1,6 @@
 
+from hgi_ventas.serializer import PartidaSerializer
+from hgi_ventas.models import Partida
 from hgi_ventas.models import ProductoOC
 from hgi_static.models import Contrato
 from hgi_users.models import CargoUser
@@ -53,13 +55,22 @@ def can_accept_oc(oc):
         if partida_data['new_balance'] < 0:
             can = False
     return can, part_dict
-        
-            
 
 
+def update_ingreso_partida(oc_data): 
+    productos = ProductoOC.objects.filter(oc=oc_data['id'])
+    for product in productos:
+        partida = Partida.objects.get(id=product.partida)
+        partida.ingresado += product.total_precio()
+        partida.save()
+    return
 
 
-
-
-
-
+def get_total_partidas_APU(partidas):
+    partidas = PartidaSerializer(partidas, many=True).data
+    total_partidas = 0
+    total_ingresado = 0
+    for partida in partidas:
+        total_partidas += partida['total']
+        total_ingresado += partida['ingresado']
+    return total_partidas, total_ingresado

@@ -4,12 +4,6 @@ from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 
 
-class PresupuestoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Presupuesto
-        fields = '__all__'
-
-
 class TipoOCSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoOC
@@ -43,13 +37,34 @@ class ProductoOCSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PartidaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Partida
-        fields = '__all__'
-
-
 class RecursoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recurso
         fields = '__all__'
+
+
+class PartidaSerializer(serializers.ModelSerializer):
+    productos = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Partida
+        fields = '__all__'
+    
+    def get_productos(self, instance):
+        productos = ProductoOC.objects.filter(partida=instance.id)
+        return ProductoOCSerializer(productos, many=True).data
+
+
+class PresupuestoSerializer(serializers.ModelSerializer):
+    n_partidas = serializers.SerializerMethodField()
+    total_partidas = serializers.SerializerMethodField()
+    total_APU = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Presupuesto
+        fields = '__all__'
+
+    def get_productos(self, instance):
+        total = 0
+        productos = ProductoOC.objects.filter(partida=instance.id)
+        return ProductoOCSerializer(productos, many=True).data
