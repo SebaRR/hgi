@@ -56,15 +56,6 @@ class PartidaSerializer(serializers.ModelSerializer):
 
 
 class PresupuestoSerializer(serializers.ModelSerializer):
-    n_partidas = serializers.SerializerMethodField()
-    total_partidas = serializers.SerializerMethodField()
-    total_APU = serializers.SerializerMethodField()
-
     class Meta:
         model = Presupuesto
         fields = '__all__'
-
-    def get_productos(self, instance):
-        total = 0
-        productos = ProductoOC.objects.filter(partida=instance.id)
-        return ProductoOCSerializer(productos, many=True).data
