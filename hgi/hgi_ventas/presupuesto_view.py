@@ -67,7 +67,7 @@ class PresupuestoViewSet(viewsets.ModelViewSet):
         presupuestos_all = pages.page(out_pag).object_list
         serializer = self.serializer_class(presupuestos_all, many=True)
         response_data = serializer.data
-        for presupuesto in presupuestos:
+        for presupuesto in response_data:
             contrato = Contrato.objects.get(id=presupuesto["contrato"])
             partidas = Partida.objects.filter(contrato=contrato)
             presupuesto["total_partidas"], presupuesto["total_APU"] = get_total_partidas_APU(partidas)
