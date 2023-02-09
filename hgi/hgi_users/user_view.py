@@ -1,5 +1,8 @@
 from django.utils import timezone
 from django.shortcuts import render
+from hgi.utils import get_user_from_usertoken
+from hgi_users.serializer import CargoUserSerializer
+from hgi_users.models import CargoUser
 from hgi_users.serializer import UserSerializer
 from hgi_users.models import User
 from hgi_users.serializer import CreateUserSerializer, UserTokenSerializer
@@ -14,8 +17,8 @@ import json
 from json.decoder import JSONDecodeError
 from django.http.response import JsonResponse
 from rest_framework import viewsets, permissions
-
-
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate, login, logout
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -30,6 +33,10 @@ class UserViewSet(viewsets.ModelViewSet):
         self.queryset = User.objects.all()
         user = self.get_object()
         data_user = self.serializer_class(user).data
+        if user.position is not None:
+            cargo_user = CargoUser.objects.get(id=user.position)
+            cargo_user = CargoUserSerializer(cargo_user).data
+            data_user["cargo"] = cargo_user
         return JsonResponse({"user":data_user}, status=200)
 
 
@@ -77,7 +84,7 @@ def register(request):
 
 @csrf_exempt
 @api_view(["POST"])
-def login(request):
+def login_v1(request):
     data = json.loads(request.body)
     if ("username" in data.keys()) and ("password" in data.keys()):
         user = User.objects.get(username=data["username"].lower())
@@ -94,9 +101,48 @@ def login(request):
     return JsonResponse({"status_text": "No se enviaron los parametros correctos"}, status=403)
 
 
+def login_v2(request):
+    data = json.loads(request.body)
+    print(data)
+    if ("username" in data.keys()) and ("password" in data.keys()):
+        username = data["username"]
+        print(username)
+        password = data["password"]
+        print(password)
+        user = authenticate(request, username=username, password=password)
+        print(user)
+        if user is not None:
+            login(request,user)
+            print(request)
+            user_data = UserSerializer(user).data
+            return JsonResponse({"user":user_data}, status=202)
+        else:
+            return JsonResponse({"status_text": "Contraseña incorrecta"}, status=403)
+    return JsonResponse({"status_text": "No se envio la contraseña o username."}, status=403)
+
+
 @csrf_exempt
 @api_view(["POST"])
-def logout(request):
+def logout_v1(request):
     request.user.auth_token.delete()
     logout(request)
     return JsonResponse({"status_text" : "Sesión cerrada con exito."}, status=202)
+
+
+@csrf_exempt
+@api_view(["GET"])
+def load_user(request):
+    token = request.headers["Authorization"].replace("Token ", "")
+    user = get_user_from_usertoken(token)
+    if user:
+        serializer = UserSerializer(user)
+        user_data = serializer.data
+        user_data["token"] = token
+        if user.position is not None:
+            cargo_user = CargoUser.objects.get(id=user.position)
+            cargo_user = CargoUserSerializer(cargo_user).data
+            user_data["cargo"] = cargo_user
+
+        response = {"status_code": 200, "user": user_data}
+        return JsonResponse(response, status=200)
+    return JsonResponse({"status_text": str(serializer.errors)}, status=400)

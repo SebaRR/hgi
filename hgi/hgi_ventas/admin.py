@@ -32,7 +32,7 @@ class PartidaAdmin(admin.ModelAdmin):
         model = Partida
 
 class RecursoAdmin(admin.ModelAdmin):
-    list_display = ["id", "codigo", "imputable", "recurso"]
+    list_display = ["id", "codigo", "descripcion", "imputable", "recurso"]
     class meta:
         model = Recurso
 

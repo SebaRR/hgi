@@ -99,10 +99,11 @@ class Recurso(models.Model):
 
 
 class ProdRecurso(models.Model):
-    
+
     total = models.IntegerField()
     ingresado = models.IntegerField()
 
+    recurso = models.ForeignKey(Recurso, on_delete=models.SET_NULL, null=True)
     creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     inicio = models.DateTimeField(auto_now_add=True)
     termino = models.DateTimeField(null=True)
