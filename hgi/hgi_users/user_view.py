@@ -34,7 +34,7 @@ class UserViewSet(viewsets.ModelViewSet):
         user = self.get_object()
         data_user = self.serializer_class(user).data
         if user.position is not None:
-            cargo_user = CargoUser.objects.get(id=user.position)
+            cargo_user = CargoUser.objects.get(id=user.position.id)
             cargo_user = CargoUserSerializer(cargo_user).data
             data_user["cargo"] = cargo_user
         return JsonResponse({"user":data_user}, status=200)
@@ -112,7 +112,7 @@ def login_v2(request):
             login(request,user)
             user_data = UserSerializer(user).data
             if user.position is not None:
-                cargo_user = CargoUser.objects.get(id=user.position)
+                cargo_user = CargoUser.objects.get(id=user.position.id)
                 cargo_user = CargoUserSerializer(cargo_user).data
                 user_data["cargo"] = cargo_user
             return JsonResponse({"user":user_data}, status=202)
@@ -139,7 +139,7 @@ def load_user(request):
         user_data = serializer.data
         user_data["token"] = token
         if user.position is not None:
-            cargo_user = CargoUser.objects.get(id=user.position)
+            cargo_user = CargoUser.objects.get(id=user.position.id)
             cargo_user = CargoUserSerializer(cargo_user).data
             user_data["cargo"] = cargo_user
 
