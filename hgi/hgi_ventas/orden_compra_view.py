@@ -1,4 +1,5 @@
 
+from hgi.utils import add_info_oc
 from hgi.utils import update_ingreso_partida
 from hgi_static.serializer import ContratoSerializer
 from hgi_static.models import Contrato
@@ -30,9 +31,10 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk):
         self.queryset = OrdenCompra.objects.all()
-        ppto = self.get_object()
-        data_ppto = self.serializer_class(ppto).data
-        return JsonResponse({"orden_compra":data_ppto}, status=200)
+        oc = self.get_object()
+        oc_data = self.serializer_class(oc).data
+        add_info_oc(oc, oc_data)
+        return JsonResponse({"orden_compra":oc_data}, status=200)
     
     def get_queryset(self):
         self.get_queryset = OrdenCompra.objects.all()
@@ -49,13 +51,10 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
             user = get_user_from_usertoken(request.headers['Authorization'])
         else:
             return JsonResponse ({'status_text':'No usaste token'}, status=403)
-
         ocs = self.get_queryset()
         final_oc_list = []
-
         if ocs.count() == 0:
             return JsonResponse ({"total_pages": 0,"total_objects": 0,"actual_page": 0,"objects": [],},status=200,)
-        
         for oc in ocs.reverse():
             if user_can_see_oc(user, oc):
                 final_oc_list.append(oc)
@@ -72,7 +71,9 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
         oc_list = pages.page(out_pag).object_list
         serializer = self.serializer_class(oc_list, many=True)
         response_data = serializer.data
-        #for oc in response_data:
+        for oc_data in response_data:
+            oc = OrdenCompra.objects.get(id = oc_data['id'])
+            add_info_oc(oc, oc_data)
 
         return JsonResponse (
             {

@@ -74,3 +74,15 @@ def get_total_partidas_APU(partidas):
         total_partidas += partida['total']
         total_ingresado += partida['ingresado']
     return total_partidas, total_ingresado
+
+def add_info_oc(oc, oc_data):
+
+    oc_data['nombre_proveedor'] = oc.proveedor.short_name()
+    oc_data['nombre_emisor'] = oc.emisor.short_name()
+    oc_data['nombre_contrato'] = oc.contrato.nombre
+    oc_data['nombre_estado'] = oc.estado.nombre
+    oc_data['nombre_forma_pago'] = oc.forma_pago.descripcion
+    oc_data['nombre_tipo'] = oc.tipo.descripcion
+    oc_data['nombre_moneda'] = oc.moneda.simbolo
+
+    return
