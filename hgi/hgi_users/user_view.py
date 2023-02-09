@@ -104,18 +104,17 @@ def login_v1(request):
 @api_view(["POST"])
 def login_v2(request):
     data = json.loads(request.body)
-    print(data)
     if ("username" in data.keys()) and ("password" in data.keys()):
         username = data["username"]
-        print(username)
         password = data["password"]
-        print(password)
         user = authenticate(request, username=username, password=password)
-        print(user)
         if user is not None:
             login(request,user)
-            print(request)
             user_data = UserSerializer(user).data
+            if user.position is not None:
+                cargo_user = CargoUser.objects.get(id=user.position)
+                cargo_user = CargoUserSerializer(cargo_user).data
+                user_data["cargo"] = cargo_user
             return JsonResponse({"user":user_data}, status=202)
         else:
             return JsonResponse({"status_text": "Contraseña incorrecta"}, status=403)
