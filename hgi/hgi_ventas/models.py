@@ -94,7 +94,18 @@ class Recurso(models.Model):
     codigo = models.CharField(max_length=5, null=False)
     descripcion = models.CharField(max_length=50, null=False)
     imputable = models.BooleanField(default=True)
-    asociado = models.IntegerField() # asociado a otro recurso?
+    es_principal = models.BooleanField(default=False)
+    recurso = models.ForeignKey('self', related_name="recurso_padre", on_delete=models.SET_NULL, null=True)
+
+
+class ProdRecurso(models.Model):
+    
+    total = models.IntegerField()
+    ingresado = models.IntegerField()
+
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    inicio = models.DateTimeField(auto_now_add=True)
+    termino = models.DateTimeField(null=True)
 
 
 class ProductoOC(models.Model):
@@ -113,7 +124,7 @@ class ProductoOC(models.Model):
     moc = models.IntegerField() # 0 
     ant = models.IntegerField() # 0
 
-    recurso = models.ForeignKey(Recurso, on_delete=models.SET_NULL, null=True)
+    recurso = models.ForeignKey(ProdRecurso, on_delete=models.SET_NULL, null=True)
     partida = models.ForeignKey(Partida, on_delete=models.SET_NULL, null=True)
     creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     unidad = models.ForeignKey(UnidadProducto, on_delete=models.SET_NULL, null=True)
