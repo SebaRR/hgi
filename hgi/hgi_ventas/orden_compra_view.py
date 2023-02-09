@@ -42,6 +42,14 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
         if 'proveedor' in self.request.query_params.keys():
             proveedor = self.request.query_params['proveedor']
             oc = oc.filter(proveedor = proveedor)
+        
+        if 'creador' in self.request.query_params.keys():
+            creador = self.request.query_params['creador']
+            oc = oc.filter(creador = creador)
+        
+        if 'estado' in self.request.query_params.keys():
+            estado = self.request.query_params['estado']
+            oc = oc.filter(estado = estado)
             
         return oc
     
