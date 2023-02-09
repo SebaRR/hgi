@@ -125,7 +125,7 @@ def login_v2(request):
 @csrf_exempt
 @api_view(["POST"])
 def logout_v1(request):
-    logout(request)
+    #logout(request)
     return JsonResponse({"status_text" : "Sesión cerrada con exito."}, status=202)
 
 

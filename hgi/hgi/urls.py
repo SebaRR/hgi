@@ -63,7 +63,7 @@ urlpatterns = [
     re_path(r"^", include(router.urls)),
     path('admin/', admin.site.urls),
     path('create_user', user_view.register, name='register'),
-    path('login', user_view.login, name='login'),
+    path('login', user_view.login_v1, name='login'),
     path('login_v2', user_view.login_v2, name='login_v2'),
     path('logout', user_view.logout_v1, name='logout'),
     path('load_user', user_view.load_user, name='load_user'),
