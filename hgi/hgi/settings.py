@@ -166,3 +166,6 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:1234',
     'http://localhost:3000'
 ]
+
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
