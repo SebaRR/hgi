@@ -95,7 +95,7 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
         else:
             return JsonResponse ({'status_text':'No usaste token'}, status=403)
 
-        data['creador'] = user
+        data['creador'] = user.id
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             serializer.save()
