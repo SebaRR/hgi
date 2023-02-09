@@ -100,7 +100,8 @@ def login_v1(request):
         return JsonResponse({"status_text": "El usuario no existe"}, status=403)
     return JsonResponse({"status_text": "No se enviaron los parametros correctos"}, status=403)
 
-
+@csrf_exempt
+@api_view(["POST"])
 def login_v2(request):
     data = json.loads(request.body)
     print(data)
