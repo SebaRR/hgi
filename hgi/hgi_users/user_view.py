@@ -31,7 +31,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk):
         self.queryset = User.objects.all()
-        print(request.user)
+        print(request.session.keys())
         user = self.get_object()
         data_user = self.serializer_class(user).data
         if user.position is not None:
