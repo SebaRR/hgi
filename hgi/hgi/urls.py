@@ -65,7 +65,7 @@ urlpatterns = [
     path('create_user', user_view.register, name='register'),
     path('login', user_view.login, name='login'),
     path('login_v2', user_view.login_v2, name='login_v2'),
-    path('logout', user_view.logout, name='logout'),
+    path('logout', user_view.logout_v1, name='logout'),
     path('load_user', user_view.load_user, name='load_user'),
     
 

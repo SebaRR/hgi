@@ -31,7 +31,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk):
         self.queryset = User.objects.all()
-        print(request.session['_auth_user_id'])
+        #print(request.session['_auth_user_id'])
         user = self.get_object()
         data_user = self.serializer_class(user).data
         if user.position is not None:
@@ -125,7 +125,6 @@ def login_v2(request):
 @csrf_exempt
 @api_view(["POST"])
 def logout_v1(request):
-    request.user.auth_token.delete()
     logout(request)
     return JsonResponse({"status_text" : "Sesión cerrada con exito."}, status=202)
 
