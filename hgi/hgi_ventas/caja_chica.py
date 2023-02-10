@@ -12,7 +12,7 @@ import json
 from json.decoder import JSONDecodeError
 from django.http.response import JsonResponse
 from rest_framework import viewsets, permissions
-
+from django.core.paginator import Paginator
 
 class CajaChicaViewSet(viewsets.ModelViewSet):
     queryset = CajaChica.objects.all()
@@ -23,6 +23,44 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk):
         self.queryset = CajaChica.objects.all()
-        recurso = self.get_object()
-        data_recurso = self.serializer_class(recurso).data
-        return JsonResponse({"recurso":data_recurso}, status=200)
+        caja = self.get_object()
+        data_caja = self.serializer_class(caja).data
+        data_caja['nombre_estado'] = caja.estado.estado
+        data_caja['nombre_creador'] = caja.creador.short_name()
+        data_caja['nombre_contrato'] = caja.contrato.nombre
+        return JsonResponse({"caja_chica":data_caja}, status=200)
+    
+    def get_queryset(self):
+        self.get_queryset = CajaChica.objects.all()
+        cajas = self.queryset
+
+        if 'contrato' in self.request.query_params.keys():
+            contrato = self.request.query_params['contrato']
+            cajas = cajas.filter(contrato = contrato)
+        
+        if 'oc' in self.request.query_params.keys():
+            oc = self.request.query_params['oc']
+            cajas = cajas.filter(oc = oc)
+            
+        return cajas
+
+    def list(self, request):
+        cajas = self.get_queryset()
+        pages = Paginator(cajas.order_by('fecha').reverse(), 25)
+        out_pag = 1
+        total_pages = pages.num_pages
+        count_objects = pages.count
+        if self.request.query_params.keys():
+            if 'page' in self.request.query_params.keys():
+                page_asked = int(self.request.query_params['page'])
+                if page_asked in pages.page_range:
+                    out_pag = page_asked
+        cajas_all = pages.page(out_pag).object_list
+        serializer = self.serializer_class(cajas_all, many=True)
+        response_data = serializer.data
+        for caja_data in response_data:
+            caja = CajaChica.objects.get(id=caja_data['id'])
+            caja_data['nombre_estado'] = caja.estado.estado
+            caja_data['nombre_creador'] = caja.creador.short_name()
+            caja_data['nombre_contrato'] = caja.contrato.nombre
+        return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
