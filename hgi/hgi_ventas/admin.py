@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida, Recurso, ProdRecurso
+from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida, Recurso, ProdRecurso, CajaChica, EstadoCajaChica, ItemCajaChica, TipoDocumento
 
 class PresupuestoAdmin(admin.ModelAdmin):
     list_display = ["id","glosa", "prm", "pro", "tipo", "usuario", "contrato"]
@@ -41,6 +41,29 @@ class ProdRecursoAdmin(admin.ModelAdmin):
     class meta:
         model = ProdRecurso
 
+class ItemCajaChicaAdmin(admin.ModelAdmin):
+    list_display = ["id", "detalle", "total"]
+    class meta:
+        model = ItemCajaChica
+
+class TipoDocumentoAdmin(admin.ModelAdmin):
+    list_display = ["id", "descripcion", "operacion"]
+    class meta:
+        model = TipoDocumento
+
+class CajaChicaAdmin(admin.ModelAdmin):
+    list_display = ["id", "total", "creador"]
+    class meta:
+        model = CajaChica
+
+class EstadoCajaChicaAdmin(admin.ModelAdmin):
+    list_display = ["id", "estado", "creador"]
+    class meta:
+        model = EstadoCajaChica
+
+
+
+
 admin.site.register(Presupuesto, PresupuestoAdmin)
 admin.site.register(TipoOC, TipoOCAdmin)
 admin.site.register(OrdenCompra, OrdenCompraAdmin)
@@ -49,3 +72,7 @@ admin.site.register(ProductoOC, ProductoOCAdmin)
 admin.site.register(Partida, PartidaAdmin)
 admin.site.register(Recurso, RecursoAdmin)
 admin.site.register(ProdRecurso, ProdRecursoAdmin)
+admin.site.register(ItemCajaChica, ItemCajaChicaAdmin)
+admin.site.register(TipoDocumento, TipoDocumentoAdmin)
+admin.site.register(CajaChica, CajaChicaAdmin)
+admin.site.register(EstadoCajaChica, EstadoCajaChicaAdmin)

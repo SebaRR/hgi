@@ -1,4 +1,5 @@
 
+from hgi_ventas.models import ProductoOC
 from hgi.utils import add_info_oc
 from hgi.utils import update_ingreso_partida
 from hgi_static.serializer import ContratoSerializer
@@ -20,6 +21,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 class OrdenCompraViewSet(viewsets.ModelViewSet):
@@ -50,7 +52,16 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
         if 'estado' in self.request.query_params.keys():
             estado = self.request.query_params['estado']
             oc = oc.filter(estado = estado)
-            
+        
+        if "search" in self.request.query_params.keys():
+            producto_query = Q(producto__contains=self.request.query_params["search"])
+            productos = ProductoOC.objects.filter(producto_query)
+            list_oc = []
+            for producto in productos:
+                if producto.oc.id not in list_oc:
+                    list_oc.append(producto.oc.id)
+            oc = oc.filter(id__overlap=[list_oc])
+
         return oc
     
     def list(self, request):

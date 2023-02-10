@@ -1,5 +1,5 @@
 
-from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida, Recurso, ProdRecurso
+from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida, Recurso, ProdRecurso, CajaChica, EstadoCajaChica, ItemCajaChica, TipoDocumento
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 
@@ -12,6 +12,7 @@ class TipoOCSerializer(serializers.ModelSerializer):
 
 class OrdenCompraSerializer(serializers.ModelSerializer):
     total_oc = serializers.SerializerMethodField()
+    n_productos = serializers.SerializerMethodField()
 
     class Meta:
         model = OrdenCompra
@@ -23,6 +24,10 @@ class OrdenCompraSerializer(serializers.ModelSerializer):
         for producto in productos:
             total += producto.precio * producto.cantidad
         return total
+
+    def get_n_productos(self, instance):
+        products = ProductoOC.objects.filter(oc=instance.id)
+        return products.count()
 
 
 class UnidadProductoSerializer(serializers.ModelSerializer):
@@ -71,3 +76,35 @@ class ProdRecursoSerializer(serializers.ModelSerializer):
     def get_disponible(self, instance):
         total = instance.total - instance.ingresado
         return total
+    
+
+class EstadoCajaChicaSerializer(serializers.ModelSerializer):
+    disponible = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EstadoCajaChica
+        fields = '__all__'
+
+
+class CajaChicaSerializer(serializers.ModelSerializer):
+    disponible = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CajaChica
+        fields = '__all__'
+
+
+class TipoDocumentoSerializer(serializers.ModelSerializer):
+    disponible = serializers.SerializerMethodField()
+
+    class Meta:
+        model = TipoDocumento
+        fields = '__all__'
+
+    
+class ItemCajaChicaSerializer(serializers.ModelSerializer):
+    disponible = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ItemCajaChica
+        fields = '__all__'

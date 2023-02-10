@@ -23,17 +23,17 @@ class TipoOC(models.Model):
     descripcion = models.CharField(max_length=50, null=False)
     texto = models.CharField(max_length=1000, null=False)
     codigo = models.IntegerField()
-    sub = models.BooleanField()
-    rem = models.BooleanField()
-    pro = models.IntegerField()
-    pag = models.IntegerField()
-    arr = models.BooleanField()
-    rah = models.BooleanField()
-    cch = models.BooleanField()
-    man = models.BooleanField()
-    ope = models.IntegerField()
-    nco = models.CharField(max_length=3, null=False)
-    col = models.CharField(max_length=6, null=False)
+    sub = models.BooleanField(null=True, blank=True)
+    rem = models.BooleanField(null=True, blank=True)
+    pro = models.IntegerField(null=True, blank=True)
+    pag = models.IntegerField(null=True, blank=True)
+    arr = models.BooleanField(null=True, blank=True)
+    rah = models.BooleanField(null=True, blank=True)
+    cch = models.BooleanField(null=True, blank=True)
+    man = models.BooleanField(null=True, blank=True)
+    ope = models.IntegerField(null=True, blank=True)
+    nco = models.CharField(max_length=3, null=True, blank=True)
+    col = models.CharField(max_length=6, null=True, blank=True)
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
 
@@ -46,7 +46,7 @@ class OrdenCompra(models.Model):
     ref_oc = models.CharField(max_length=20, null=False)
 
     direccion_despacho = models.CharField(max_length=60, null=False) #parte del contrato - editable
-
+    
     ate_oc = models.CharField(max_length=50, null=False) #parte del proveedor
     mail = models.CharField(max_length=40, null=False) #parte del proveedor - editable
     mail2 = models.CharField(max_length=40, null=False) #parte del proveedor - editable
@@ -103,10 +103,33 @@ class ProdRecurso(models.Model):
     total = models.IntegerField()
     ingresado = models.IntegerField()
 
+    partida = models.ForeignKey(Partida, on_delete=models.SET_NULL, null=True)
     recurso = models.ForeignKey(Recurso, on_delete=models.SET_NULL, null=True)
     creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     inicio = models.DateTimeField(auto_now_add=True)
     termino = models.DateTimeField(null=True)
+
+
+class ItemRecurso(models.Model):
+    
+    descripcion = models.CharField(max_length=80, null=True, blank=True)
+    sca = models.CharField(max_length=25, null=True, blank=True)
+    unidad = models.CharField(max_length=10, null=True, blank=True)
+    cantidad = models.FloatField()
+    precio = models.IntegerField()
+    observacion = models.CharField(max_length=500, null=True, blank=True)
+    activo = models.BooleanField(default=False)
+    ing = models.IntegerField()
+
+    fecha = models.DateTimeField(auto_now_add=True)
+    recurso = models.ForeignKey(ProdRecurso, on_delete=models.SET_NULL, null=True)
+    partida = models.ForeignKey(Partida, on_delete=models.SET_NULL, null=True)
+    contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True)
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    
+    def total_precio(self):
+        total = self.cantidad * self.precio    
+        return total
 
 
 class ProductoOC(models.Model):
@@ -115,15 +138,15 @@ class ProductoOC(models.Model):
     cantidad = models.FloatField()
     precio = models.FloatField()
     descuento = models.FloatField()
-    mat = models.IntegerField() # si tiene "partida" tiene mat -> material?
-    afe = models.IntegerField() 
-    ing = models.IntegerField() #ingreso?
+    mat = models.IntegerField(null=True, blank=True) # si tiene "partida" tiene mat -> material?
+    afe = models.IntegerField(null=True, blank=True) 
+    ing = models.IntegerField(null=True, blank=True) #ingreso?
     cpp = models.CharField(max_length=15, null=True, blank=True)
-    lso = models.IntegerField() #si no tiene ing tiene esto
-    doc = models.IntegerField() # 0
-    car = models.IntegerField() # 0
-    moc = models.IntegerField() # 0 
-    ant = models.IntegerField() # 0
+    lso = models.IntegerField(null=True, blank=True) #si no tiene ing tiene esto
+    doc = models.IntegerField(null=True, blank=True) # 0
+    car = models.IntegerField(null=True, blank=True) # 0
+    moc = models.IntegerField(null=True, blank=True) # 0 
+    ant = models.IntegerField(null=True, blank=True) # 0
 
     recurso = models.ForeignKey(ProdRecurso, on_delete=models.SET_NULL, null=True)
     partida = models.ForeignKey(Partida, on_delete=models.SET_NULL, null=True)
@@ -138,3 +161,58 @@ class ProductoOC(models.Model):
         total = self.cantidad * self.precio
         descuento = (self.descuento * total)/100        
         return (total - descuento)
+
+
+class EstadoCajaChica(models.Model):
+
+    estado = models.CharField(max_length=20, null=True, blank=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    oba = models.CharField(max_length=15, null=True, blank=True)
+
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+
+class CajaChica(models.Model):
+
+    fecha = models.DateTimeField(auto_now_add=True) 
+    aut = models.IntegerField()
+    total = models.IntegerField() #total de los productos que contiene
+    estado = models.ForeignKey(EstadoCajaChica, on_delete=models.SET_NULL, null=True)
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True)
+    oc = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE, null=True)
+
+
+class TipoDocumento(models.Model):
+
+    descripcion = models.CharField(max_length=30, null=True, blank=True)
+    operacion = models.IntegerField(null=True, blank=True)
+    nco = models.CharField(max_length=3, null=True, blank=True)
+    orden_1 = models.IntegerField(null=True, blank=True)
+    orden_2 = models.IntegerField(null=True, blank=True)
+    orden_3 = models.IntegerField(null=True, blank=True)
+    iva = models.BooleanField(default=True)
+    ret = models.IntegerField(null=True, blank=True)
+    referencia = models.CharField(max_length=30, null=True, blank=True)
+    fim = models.CharField(max_length=2, null=True, blank=True)
+    lve = models.IntegerField(null=True, blank=True)
+    olv = models.IntegerField(null=True, blank=True)
+
+
+
+class ItemCajaChica(models.Model):
+
+    detalle = models.CharField(max_length=70, null=True, blank=True)
+    orden = models.IntegerField()
+    total = models.IntegerField()
+    ie = models.IntegerField(null=True, blank=True) #gasto en caso de petroleo - bencina
+
+    tipo = models.ForeignKey(TipoDocumento, on_delete=models.SET_NULL, null=True)
+    contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True)
+    partida = models.ForeignKey(Partida, on_delete=models.SET_NULL, null=True)
+    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    caja_chica = models.ForeignKey(CajaChica, on_delete=models.SET_NULL, null=True)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True)
+    recurso = models.ForeignKey(ProdRecurso, on_delete=models.SET_NULL, null=True)
+
+    fecha = models.DateTimeField(auto_now_add=True) 

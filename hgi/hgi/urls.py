@@ -2,6 +2,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
+from hgi_ventas.caja_chica import CajaChicaViewSet
+from hgi_ventas.estado_cchica import EstadoCajaChicaViewSet
+from hgi_ventas.item_cchica import ItemCajaChicaViewSet
+from hgi_ventas.tipo_doc import TipoDocumentoViewSet
 from hgi_ventas.prodrecurso_view import ProdRecursoViewSet
 from hgi_ventas.recurso_view import RecursoViewSet
 from hgi_users.cargo_user import CargoUserViewSet
@@ -54,6 +58,10 @@ router.register(r"partida", PartidaViewSet)
 router.register(r"cargo_user", CargoUserViewSet)
 router.register(r"recursos", RecursoViewSet)
 router.register(r"prod_recurso", ProdRecursoViewSet)
+router.register(r"item_cch", ItemCajaChicaViewSet)
+router.register(r"tipo_doc", TipoDocumentoViewSet)
+router.register(r"caja_chica", CajaChicaViewSet)
+router.register(r"estado_cch", EstadoCajaChicaViewSet)
 
 slashless_router = routers.SimpleRouter(trailing_slash=False)
 slashless_router.registry = router.registry[:]
@@ -63,7 +71,7 @@ urlpatterns = [
     re_path(r"^", include(router.urls)),
     path('admin/', admin.site.urls),
     path('create_user', user_view.register, name='register'),
-    path('login', user_view.login_v1, name='login'),
+    path('login', user_view.login_v1, name='login_v1'),
     path('login_v2', user_view.login_v2, name='login_v2'),
     path('logout', user_view.logout_v1, name='logout'),
     path('load_user', user_view.load_user, name='load_user'),
