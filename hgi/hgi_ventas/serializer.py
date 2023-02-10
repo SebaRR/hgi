@@ -1,5 +1,5 @@
 
-from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida, Recurso, ProdRecurso, CajaChica, EstadoCajaChica, ItemCajaChica, TipoDocumento
+from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida, Recurso, ProdRecurso, CajaChica, EstadoCajaChica, ItemCajaChica, TipoDocumento, ItemRecurso
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 
@@ -77,6 +77,13 @@ class ProdRecursoSerializer(serializers.ModelSerializer):
         total = instance.total - instance.ingresado
         return total
     
+
+class ItemRecursoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ItemRecurso
+        fields = '__all__'
+
 
 class EstadoCajaChicaSerializer(serializers.ModelSerializer):
 

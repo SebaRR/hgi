@@ -46,7 +46,7 @@ class ProductoOCViewSet(viewsets.ModelViewSet):
             products = products.filter(partida__contrato = contrato)
 
         if "search" in self.request.query_params.keys():
-            text_query = Q(description__contains=self.request.query_params["search"])
+            text_query = Q(producto__contains=self.request.query_params["search"])
             products = products.filter(text_query)
             
         return products

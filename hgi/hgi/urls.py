@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
+from hgi_ventas.item_recurso import ItemRecursoViewSet
 from hgi_ventas.caja_chica import CajaChicaViewSet
 from hgi_ventas.estado_cchica import EstadoCajaChicaViewSet
 from hgi_ventas.item_cchica import ItemCajaChicaViewSet
@@ -30,6 +31,7 @@ from hgi_static.tipoppto_view import TipoPresupuestoViewSet
 from hgi_static.contrato_view import ContratoViewSet
 from hgi_users import client_view
 from hgi_users import user_view
+
 from rest_framework import routers
 from django.conf.urls import include
 
@@ -56,6 +58,7 @@ router.register(r"moneda", MonedaViewSet)
 router.register(r"estado_oc", EstadoOCViewSet)
 router.register(r"partida", PartidaViewSet)
 router.register(r"cargo_user", CargoUserViewSet)
+router.register(r"item_recurso", ItemRecursoViewSet)
 router.register(r"recursos", RecursoViewSet)
 router.register(r"prod_recurso", ProdRecursoViewSet)
 router.register(r"item_cch", ItemCajaChicaViewSet)

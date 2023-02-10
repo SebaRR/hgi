@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida, Recurso, ProdRecurso, CajaChica, EstadoCajaChica, ItemCajaChica, TipoDocumento
+from hgi_ventas.models import Presupuesto, OrdenCompra, ProductoOC, TipoOC, UnidadProducto, Partida, Recurso, ProdRecurso, CajaChica, EstadoCajaChica, ItemCajaChica, TipoDocumento, ItemRecurso
 
 class PresupuestoAdmin(admin.ModelAdmin):
     list_display = ["id","glosa", "prm", "pro", "tipo", "usuario", "contrato"]
@@ -61,7 +61,10 @@ class EstadoCajaChicaAdmin(admin.ModelAdmin):
     class meta:
         model = EstadoCajaChica
 
-
+class ItemRecursoAdmin(admin.ModelAdmin):
+    list_display = ["id", "descripcion", "cantidad", "precio"]
+    class meta:
+        model = ItemRecurso
 
 
 admin.site.register(Presupuesto, PresupuestoAdmin)
@@ -71,6 +74,7 @@ admin.site.register(UnidadProducto, UnidadProductoAdmin)
 admin.site.register(ProductoOC, ProductoOCAdmin)
 admin.site.register(Partida, PartidaAdmin)
 admin.site.register(Recurso, RecursoAdmin)
+admin.site.register(ItemRecurso, ItemRecursoAdmin)
 admin.site.register(ProdRecurso, ProdRecursoAdmin)
 admin.site.register(ItemCajaChica, ItemCajaChicaAdmin)
 admin.site.register(TipoDocumento, TipoDocumentoAdmin)

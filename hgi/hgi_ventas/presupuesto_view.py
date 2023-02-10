@@ -48,7 +48,7 @@ class PresupuestoViewSet(viewsets.ModelViewSet):
             presupuestos = presupuestos.filter(tipo = tipo)
         
         if "search" in self.request.query_params.keys():
-            text_query = Q(description__contains=self.request.query_params["glosa"])
+            text_query = Q(glosa__contains=self.request.query_params["glosa"])
             presupuestos = presupuestos.filter(text_query)
             
         return presupuestos

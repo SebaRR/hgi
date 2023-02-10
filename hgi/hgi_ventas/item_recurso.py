@@ -1,7 +1,7 @@
 
 
-from hgi_ventas.serializer import ProdRecursoSerializer
-from hgi_ventas.models import ProdRecurso
+from hgi_ventas.models import ItemRecurso
+from hgi_ventas.serializer import ItemRecursoSerializer
 from rest_framework.decorators import (
     api_view,
     authentication_classes,
@@ -15,32 +15,32 @@ from django.http.response import JsonResponse
 from rest_framework import viewsets, permissions
 from django.core.paginator import Paginator
 
-class ProdRecursoViewSet(viewsets.ModelViewSet):
-    queryset = ProdRecurso.objects.all()
+class ItemRecursoViewSet(viewsets.ModelViewSet):
+    queryset = ItemRecurso.objects.all()
     authentication_classes = ()
     permission_classes = [permissions.AllowAny,]
-    serializer_class = ProdRecursoSerializer
+    serializer_class = ItemRecursoSerializer
     http_method_names = ["get", "patch", "delete", "post"]
 
     def retrieve(self, request, pk):
-        self.queryset = ProdRecurso.objects.all()
-        prod_recurso = self.get_object()
-        data_prod_recurso = self.serializer_class(prod_recurso).data
-        return JsonResponse({"prod_recurso":data_prod_recurso}, status=200)
+        self.queryset = ItemRecurso.objects.all()
+        item = self.get_object()
+        data_item = self.serializer_class(item).data
+        return JsonResponse({"item_rec":data_item}, status=200)
     
     def get_queryset(self):
-        self.get_queryset = ProdRecurso.objects.all()
-        products = self.queryset
+        self.get_queryset = ItemRecurso.objects.all()
+        items = self.queryset
 
         if 'partida' in self.request.query_params.keys():
             partida = self.request.query_params['partida']
-            products = products.filter(partida = partida)
+            items = items.filter(partida = partida)
             
-        return products
+        return items
 
     def list(self, request):
-        productos = self.get_queryset()
-        pages = Paginator(productos.order_by('fecha_ingreso').reverse(), 25)
+        items = self.get_queryset()
+        pages = Paginator(items.order_by('fecha').reverse(), 25)
         out_pag = 1
         total_pages = pages.num_pages
         count_objects = pages.count
@@ -49,8 +49,8 @@ class ProdRecursoViewSet(viewsets.ModelViewSet):
                 page_asked = int(self.request.query_params['page'])
                 if page_asked in pages.page_range:
                     out_pag = page_asked
-        productos_all = pages.page(out_pag).object_list
-        serializer = self.serializer_class(productos_all, many=True)
+        items_all = pages.page(out_pag).object_list
+        serializer = self.serializer_class(items_all, many=True)
         response_data = serializer.data
         
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
