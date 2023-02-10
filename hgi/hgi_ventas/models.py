@@ -193,7 +193,7 @@ class TipoDocumento(models.Model):
     orden_3 = models.IntegerField(null=True, blank=True)
     iva = models.BooleanField(default=True)
     ret = models.IntegerField(null=True, blank=True)
-    referencia = models.CharField(max_length=30, null=True, blank=True)
+    referencia = models.ForeignKey('self', related_name="doc_referencia", on_delete=models.SET_NULL, null=True)
     fim = models.CharField(max_length=2, null=True, blank=True)
     lve = models.IntegerField(null=True, blank=True)
     olv = models.IntegerField(null=True, blank=True)
