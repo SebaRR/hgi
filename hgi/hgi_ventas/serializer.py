@@ -20,9 +20,12 @@ class OrdenCompraSerializer(serializers.ModelSerializer):
     
     def get_total_oc(self, instance):
         total = 0
-        productos = ProductoOC.objects.filter(oc=instance.id)
-        for producto in productos:
-            total += producto.precio * producto.cantidad
+        if instance.tipo != 13:
+            productos = ProductoOC.objects.filter(oc=instance.id)
+            for producto in productos:
+                total += producto.precio * producto.cantidad
+        else:
+            total = instance.total
         return total
 
     def get_n_productos(self, instance):

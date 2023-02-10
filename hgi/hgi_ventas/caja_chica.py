@@ -1,4 +1,7 @@
 
+from hgi_ventas.serializer import OrdenCompraSerializer
+from hgi_users.models import Proveedor
+from hgi_ventas.models import OrdenCompra
 from hgi_ventas.models import CajaChica
 from hgi_ventas.serializer import CajaChicaSerializer
 from rest_framework.decorators import (
@@ -64,3 +67,33 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
             caja_data['nombre_creador'] = caja.creador.short_name()
             caja_data['nombre_contrato'] = caja.contrato.nombre
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
+
+    def partial_update(self, request, pk, *args, **kwargs):
+        self.queryset = CajaChica.objects.all()
+        caja = self.get_object()
+        if caja.estado == 1:
+            if 'revision' in request.data.keys():
+                del request.data['revision']
+                data = request.data
+                data['estado'] = 2
+                serializer = self.serializer_class(caja, data=data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    data_caja = serializer.data
+                    proveedor = Proveedor.objects.get(rs = 'Constructora VDZ SpA')
+                    caja_oc = OrdenCompra.objects.create(glosa='Generado por Caja Chica Id: ' + str(data_caja['id']),proveedor=proveedor.id,estado=6,forma_pago=1,contrato=data_caja['contrato'],emisor=data_caja['creador'],creador=data_caja['creador'],tipo=13,moneda=1,total=data_caja['total'])
+                    caja_oc_data = OrdenCompraSerializer(caja_oc).data
+                    return JsonResponse({"status_text": "Caja editada con exito.", "caja": data_caja,"oc":caja_oc_data},status=202)
+                else:
+                    return JsonResponse({"status_text": str(serializer.errors)}, status=400)
+            else:
+                serializer = self.serializer_class(caja, data=request.data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    data_caja = serializer.data
+                    return JsonResponse({"status_text": "Caja editada con exito.", "caja": data_caja,},status=202)
+                else:
+                    return JsonResponse({"status_text": str(serializer.errors)}, status=400)
+        else:
+            return JsonResponse({"status_text": "No se puede editar esta caja por su estado."}, status=400)
+        

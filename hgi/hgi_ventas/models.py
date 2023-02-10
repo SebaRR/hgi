@@ -41,15 +41,15 @@ class TipoOC(models.Model):
 class OrdenCompra(models.Model):
 
     glosa = models.CharField(max_length=500, null=False)
-    descuento_general = models.IntegerField()
-    observacion = models.CharField(max_length=500, null=False)
-    ref_oc = models.CharField(max_length=20, null=False)
-
-    direccion_despacho = models.CharField(max_length=60, null=False) #parte del contrato - editable
+    descuento_general = models.IntegerField(default=0)
+    observacion = models.CharField(max_length=500, null=False, default="Sin Observaciones.")
+    ref_oc = models.CharField(max_length=20, null=True)
+    total = models.IntegerField(default=0)
+    direccion_despacho = models.CharField(max_length=60, null=True, blank=True) #parte del contrato - editable
     
-    ate_oc = models.CharField(max_length=50, null=False) #parte del proveedor
-    mail = models.CharField(max_length=40, null=False) #parte del proveedor - editable
-    mail2 = models.CharField(max_length=40, null=False) #parte del proveedor - editable
+    ate_oc = models.CharField(max_length=50, null=True, blank=True) #parte del proveedor
+    mail = models.CharField(max_length=40, null=True, blank=True) #parte del proveedor - editable
+    mail2 = models.CharField(max_length=40, null=True, blank=True) #parte del proveedor - editable
 
     autorizacion_adm = models.BooleanField(default=False) #user A
     autorizacion_res = models.BooleanField(default=False) #user R
