@@ -79,7 +79,6 @@ class ProdRecursoSerializer(serializers.ModelSerializer):
     
 
 class EstadoCajaChicaSerializer(serializers.ModelSerializer):
-    disponible = serializers.SerializerMethodField()
 
     class Meta:
         model = EstadoCajaChica
@@ -87,7 +86,6 @@ class EstadoCajaChicaSerializer(serializers.ModelSerializer):
 
 
 class CajaChicaSerializer(serializers.ModelSerializer):
-    disponible = serializers.SerializerMethodField()
 
     class Meta:
         model = CajaChica
@@ -95,7 +93,6 @@ class CajaChicaSerializer(serializers.ModelSerializer):
 
 
 class TipoDocumentoSerializer(serializers.ModelSerializer):
-    disponible = serializers.SerializerMethodField()
 
     class Meta:
         model = TipoDocumento
@@ -103,7 +100,6 @@ class TipoDocumentoSerializer(serializers.ModelSerializer):
 
     
 class ItemCajaChicaSerializer(serializers.ModelSerializer):
-    disponible = serializers.SerializerMethodField()
 
     class Meta:
         model = ItemCajaChica
