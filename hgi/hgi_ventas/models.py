@@ -180,7 +180,7 @@ class CajaChica(models.Model):
     estado = models.ForeignKey(EstadoCajaChica, on_delete=models.CASCADE, null=False)
     creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
-    oc = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE, null=False)
+    oc = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE, null=True)
 
 
 class TipoDocumento(models.Model):
