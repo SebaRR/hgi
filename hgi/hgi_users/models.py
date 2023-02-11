@@ -104,9 +104,9 @@ class Client(models.Model):
     country = models.CharField(max_length=20,choices=country_choices, default='Chile',)
     active = models.BooleanField(default=True)
 
-    contact = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
-    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True)
+    contact = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, null=False, blank=False)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, null=False, blank=False)
 
     updated_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -127,9 +127,9 @@ class Proveedor(models.Model):
     cuenta = models.CharField(max_length=20)
     activo = models.BooleanField(default=True)
 
-    ciudad = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True)
-    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
-    pais = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True)
-    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    ciudad = models.ForeignKey(City, on_delete=models.CASCADE, null=False, blank=False)
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, null=False, blank=False)
+    pais = models.ForeignKey(Country, on_delete=models.CASCADE, null=False, blank=False)
+    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     fecha_creado = models.DateTimeField(auto_now_add=True)
     fecha_editado = models.DateTimeField(null=True, blank=True)

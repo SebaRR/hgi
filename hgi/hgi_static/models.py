@@ -20,9 +20,9 @@ class Obra(models.Model):
     codigo = models.CharField(max_length=6, null=False)
     nombre = models.CharField(max_length=50, null=False)
     activo = models.BooleanField(default=True)
-    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    cliente = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
-    estado = models.ForeignKey(EstadoObra, on_delete=models.SET_NULL, null=True)
+    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    cliente = models.ForeignKey(Client, on_delete=models.CASCADE, null=False)
+    estado = models.ForeignKey(EstadoObra, on_delete=models.CASCADE, null=False)
     fecha = models.DateTimeField(auto_now_add=True, null=True)
 
 
@@ -65,18 +65,18 @@ class Contrato(models.Model):
     peso = models.IntegerField(null=True) #dato
     ccp = models.IntegerField(default=0) #ccp por venta (dato) booleano
     
-    estado = models.ForeignKey(EstadoContrato, on_delete=models.SET_NULL, null=True)
-    tipo = models.ForeignKey(TipoContrato, on_delete=models.SET_NULL, null=True, default=6) 
-    clasificacion = models.ForeignKey(ClasiContrato, on_delete=models.SET_NULL, null=True)
-    obra = models.ForeignKey(Obra, on_delete=models.CASCADE, null=True)
-    responsable = models.ForeignKey(User, related_name='user_responsable', on_delete=models.SET_NULL, null=True)
-    administrador = models.ForeignKey(User, related_name='user_administrador', on_delete=models.SET_NULL, null=True)
-    visitador = models.ForeignKey(User, related_name='user_visitador', on_delete=models.SET_NULL, null=True)
-    of_tecnica = models.ForeignKey(User, related_name='user_of_tecnica', on_delete=models.SET_NULL, null=True)
-    compras = models.ForeignKey(User, related_name='user_compras', on_delete=models.SET_NULL, null=True)
-    administrativo = models.ForeignKey(User, related_name='user_administrativo', on_delete=models.SET_NULL, null=True)
-    prevencionista = models.ForeignKey(User, related_name='user_prevencionista', on_delete=models.SET_NULL, null=True)
-    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    estado = models.ForeignKey(EstadoContrato, on_delete=models.CASCADE, null=False)
+    tipo = models.ForeignKey(TipoContrato, on_delete=models.CASCADE, null=False, default=6) 
+    clasificacion = models.ForeignKey(ClasiContrato, on_delete=models.CASCADE, null=False)
+    obra = models.ForeignKey(Obra, on_delete=models.CASCADE, null=False)
+    responsable = models.ForeignKey(User, related_name='user_responsable', on_delete=models.CASCADE, null=False)
+    administrador = models.ForeignKey(User, related_name='user_administrador', on_delete=models.CASCADE, null=False)
+    visitador = models.ForeignKey(User, related_name='user_visitador', on_delete=models.CASCADE, null=False)
+    of_tecnica = models.ForeignKey(User, related_name='user_of_tecnica', on_delete=models.CASCADE, null=False)
+    compras = models.ForeignKey(User, related_name='user_compras', on_delete=models.CASCADE, null=False)
+    administrativo = models.ForeignKey(User, related_name='user_administrativo', on_delete=models.CASCADE, null=False)
+    prevencionista = models.ForeignKey(User, related_name='user_prevencionista', on_delete=models.CASCADE, null=False)
+    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
     inicio = models.DateTimeField(auto_now_add=True, null=False)
     termino = models.DateTimeField(null=True)
@@ -88,7 +88,7 @@ class TipoPresupuesto(models.Model):
     diminutivo = models.CharField(max_length=3, null=False)
     operacion = models.IntegerField(null=False)
     orden = models.IntegerField(null=False)
-    creador = models.ForeignKey(User, related_name='user', on_delete=models.SET_NULL, null=True)
+    creador = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE, null=False)
 
 
 class TipoPago(models.Model):
@@ -97,7 +97,7 @@ class TipoPago(models.Model):
     dias = models.IntegerField()
     orden = models.IntegerField()
 
-    creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) 
+    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False) 
 
 
 class Moneda(models.Model):
