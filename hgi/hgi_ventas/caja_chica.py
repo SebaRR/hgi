@@ -71,7 +71,7 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk, *args, **kwargs):
         self.queryset = CajaChica.objects.all()
         caja = self.get_object()
-        if caja.estado == 1:
+        if caja.estado.id == 1:
             if 'revision' in request.data.keys():
                 del request.data['revision']
                 data = request.data
