@@ -1,7 +1,7 @@
 
-from hgi.hgi_static.models import Contrato, EstadoOC, Moneda, TipoPago
-from hgi.hgi_users.models import User
-from hgi.hgi_ventas.models import TipoOC
+from hgi_static.models import Contrato, EstadoOC, Moneda, TipoPago
+from hgi_users.models import User
+from hgi_ventas.models import TipoOC
 from hgi_ventas.serializer import OrdenCompraSerializer
 from hgi_users.models import Proveedor
 from hgi_ventas.models import OrdenCompra
