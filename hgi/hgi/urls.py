@@ -34,6 +34,7 @@ from hgi_users import user_view
 
 from rest_framework import routers
 from django.conf.urls import include
+from django.conf import settings
 
 router = routers.SimpleRouter()
 router.register(r"users", user_view.UserViewSet)
