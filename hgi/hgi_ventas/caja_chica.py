@@ -104,7 +104,7 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
                         total=data_caja['total']
                     )
                     caja_oc_data = OrdenCompraSerializer(caja_oc).data
-                    caja.oc = caja_oc.id
+                    caja.oc = caja_oc
                     caja.save()
                     return JsonResponse({"status_text": "Caja editada con exito.", "caja": data_caja,"oc":caja_oc_data},status=202)
                 else:

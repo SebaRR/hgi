@@ -66,4 +66,11 @@ class ClientViewSet(viewsets.ModelViewSet):
             data_client = serializer.data
             return JsonResponse({"status_text": "Cliente editado con exito.", "client": data_client,},status=202)
         else:
-            return JsonResponse({"status_text": str(serializer.errors)}, status=400)    
+            return JsonResponse({"status_text": str(serializer.errors)}, status=400)   
+
+    def destroy(self, request, *args, **kwargs):
+        self.queryset = Client.objects.all()
+        cliente = self.get_object()
+        if cliente is not None:
+            cliente.delete()
+            return JsonResponse({'status_text': 'Cliente eliminado correctamente'}, status=200) 
