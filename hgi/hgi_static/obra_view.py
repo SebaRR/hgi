@@ -50,5 +50,10 @@ class ObraViewSet(viewsets.ModelViewSet):
         
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
     
-
+    def destroy(self, request, *args, **kwargs):
+        self.queryset = Obra.objects.all()
+        obra = self.get_object()
+        if obra is not None:
+            obra.delete()
+            return JsonResponse({'status_text': 'Obra eliminada correctamente'}, status=200)
 

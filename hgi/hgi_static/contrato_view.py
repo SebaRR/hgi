@@ -58,3 +58,10 @@ class ContratoViewSet(viewsets.ModelViewSet):
             contrato['obra_name'] = obra.nombre
         
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
+    
+    def destroy(self, request, *args, **kwargs):
+        self.queryset = Contrato.objects.all()
+        contrato = self.get_object()
+        if contrato is not None:
+            contrato.delete()
+            return JsonResponse({'status_text': 'Contrato eliminado correctamente'}, status=200)

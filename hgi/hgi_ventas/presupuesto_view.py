@@ -76,3 +76,14 @@ class PresupuestoViewSet(viewsets.ModelViewSet):
             presupuesto["name_contrato"] = contrato.nombre
             presupuesto['tipo'] = TipoPresupuestoSerializer(tipo).data
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
+
+    def partial_update(self, request, pk, *args, **kwargs):
+        self.queryset = Presupuesto.objects.all()
+        ppto = self.get_object()
+        serializer = self.serializer_class(ppto, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            data_ppto = serializer.data
+            return JsonResponse({"status_text": "Presupuesto editado con exito.", "presupuesto": data_ppto,},status=202)
+        else:
+            return JsonResponse({"status_text": str(serializer.errors)}, status=400) 

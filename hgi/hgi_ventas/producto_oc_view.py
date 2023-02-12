@@ -80,3 +80,14 @@ class ProductoOCViewSet(viewsets.ModelViewSet):
             response = {'status_code': 201, 'producto_oc': producto_data}
             return JsonResponse(response, status=201)
         return JsonResponse({'status_text': str(serializer.errors)}, status=400)
+    
+    def partial_update(self, request, pk, *args, **kwargs):
+        self.queryset = ProductoOC.objects.all()
+        producto = self.get_object()
+        serializer = self.serializer_class(producto, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            data_producto = serializer.data
+            return JsonResponse({"status_text": "ProductoOC editado con exito.", "producto_oc": data_producto,},status=202)
+        else:
+            return JsonResponse({"status_text": str(serializer.errors)}, status=400) 

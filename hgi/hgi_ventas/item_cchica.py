@@ -62,3 +62,14 @@ class ItemCajaChicaViewSet(viewsets.ModelViewSet):
             data_item['nombre_recurso'] = item.recurso.recurso.descripcion
             data_item['nombre_tipo'] = item.tipo.descripcion
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
+    
+    def partial_update(self, request, pk, *args, **kwargs):
+        self.queryset = ItemCajaChica.objects.all()
+        item = self.get_object()
+        serializer = self.serializer_class(item, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            data_item = serializer.data
+            return JsonResponse({"status_text": "ItemCajaChica editado con exito.", "item_cch": data_item,},status=202)
+        else:
+            return JsonResponse({"status_text": str(serializer.errors)}, status=400) 

@@ -54,3 +54,14 @@ class ItemRecursoViewSet(viewsets.ModelViewSet):
         response_data = serializer.data
         
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
+    
+    def partial_update(self, request, pk, *args, **kwargs):
+        self.queryset = ItemRecurso.objects.all()
+        item = self.get_object()
+        serializer = self.serializer_class(item, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            data_item = serializer.data
+            return JsonResponse({"status_text": "ItemRecurso editado con exito.", "item_rec": data_item,},status=202)
+        else:
+            return JsonResponse({"status_text": str(serializer.errors)}, status=400) 

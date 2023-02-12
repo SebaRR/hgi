@@ -56,3 +56,14 @@ class PartidaViewSet(viewsets.ModelViewSet):
         response_data = serializer.data
 
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
+
+    def partial_update(self, request, pk, *args, **kwargs):
+        self.queryset = Partida.objects.all()
+        partida = self.get_object()
+        serializer = self.serializer_class(partida, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            data_partida = serializer.data
+            return JsonResponse({"status_text": "Partida editado con exito.", "partida": data_partida,},status=202)
+        else:
+            return JsonResponse({"status_text": str(serializer.errors)}, status=400) 
