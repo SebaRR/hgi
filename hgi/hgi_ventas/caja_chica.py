@@ -83,6 +83,8 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
                     proveedor = Proveedor.objects.get(rs = 'Constructora VDZ SpA')
                     caja_oc = OrdenCompra.objects.create(glosa='Generado por Caja Chica Id: ' + str(data_caja['id']),proveedor=proveedor,estado=6,forma_pago=1,contrato=data_caja['contrato'],emisor=data_caja['creador'],creador=data_caja['creador'],tipo=13,moneda=1,total=data_caja['total'])
                     caja_oc_data = OrdenCompraSerializer(caja_oc).data
+                    caja.oc = caja_oc
+                    caja.save()
                     return JsonResponse({"status_text": "Caja editada con exito.", "caja": data_caja,"oc":caja_oc_data},status=202)
                 else:
                     return JsonResponse({"status_text": str(serializer.errors)}, status=400)
