@@ -1,4 +1,7 @@
 
+from hgi.hgi_static.models import Contrato, EstadoOC, Moneda, TipoPago
+from hgi.hgi_users.models import User
+from hgi.hgi_ventas.models import TipoOC
 from hgi_ventas.serializer import OrdenCompraSerializer
 from hgi_users.models import Proveedor
 from hgi_ventas.models import OrdenCompra
@@ -81,9 +84,27 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
                     serializer.save()
                     data_caja = serializer.data
                     proveedor = Proveedor.objects.get(rs = 'Constructora VDZ SpA')
-                    caja_oc = OrdenCompra.objects.create(glosa='Generado por Caja Chica Id: ' + str(data_caja['id']),proveedor=proveedor,estado=6,forma_pago=1,contrato=data_caja['contrato'],emisor=data_caja['creador'],creador=data_caja['creador'],tipo=13,moneda=1,total=data_caja['total'])
+                    estado_oc = EstadoOC.objects.get(id=6)
+                    forma_pago = TipoPago.objects.get(id=1)
+                    tipo_oc = TipoOC.objects.get(id=13)
+                    moneda = Moneda.objects.get(id=1)
+                    contrato_oc = Contrato.objects.get(id=data_caja['contrato'])
+                    emisor_oc = User.objects.get(id=data_caja['creador'])
+                    creador_oc = User.objects.get(id=data_caja['creador'])
+                    caja_oc = OrdenCompra.objects.create(
+                        glosa='Generado por Caja Chica Id: ' + str(data_caja['id']),
+                        proveedor=proveedor,
+                        estado=estado_oc,
+                        forma_pago=forma_pago,
+                        contrato=contrato_oc,
+                        emisor=emisor_oc,
+                        creador=creador_oc,
+                        tipo=tipo_oc,
+                        moneda=moneda,
+                        total=data_caja['total']
+                    )
                     caja_oc_data = OrdenCompraSerializer(caja_oc).data
-                    caja.oc = caja_oc
+                    caja.oc = caja_oc.id
                     caja.save()
                     return JsonResponse({"status_text": "Caja editada con exito.", "caja": data_caja,"oc":caja_oc_data},status=202)
                 else:
