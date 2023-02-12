@@ -94,6 +94,4 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
                     return JsonResponse({"status_text": "Caja editada con exito.", "caja": data_caja,},status=202)
                 else:
                     return JsonResponse({"status_text": str(serializer.errors)}, status=400)
-        else:
-            return JsonResponse({"status_text": "No se puede editar esta caja por su estado."}, status=400)
         
