@@ -71,7 +71,7 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk, *args, **kwargs):
         self.queryset = CajaChica.objects.all()
         caja = self.get_object()
-        if caja.estado.id == 1:
+        if caja.estado.id == 1 or caja.estado.estado == 'VB Admin':
             if 'revision' in request.data.keys():
                 del request.data['revision']
                 data = request.data
@@ -94,4 +94,6 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
                     return JsonResponse({"status_text": "Caja editada con exito.", "caja": data_caja,},status=202)
                 else:
                     return JsonResponse({"status_text": str(serializer.errors)}, status=400)
+        else:
+            return JsonResponse({"status_text": "Ya no puedes editarla."}, status=400)
         
