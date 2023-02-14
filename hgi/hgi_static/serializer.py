@@ -1,4 +1,5 @@
 
+from hgi_static.models import PermisoContratoUser
 from hgi_ventas.models import ProductoOC
 from hgi_ventas.models import Presupuesto, Partida
 from hgi_static.models import Contrato, Obra, TipoPresupuesto, ClasiContrato, EstadoContrato, EstadoOC, Moneda, TipoContrato, TipoPago
@@ -111,4 +112,10 @@ class MonedaSerializer(serializers.ModelSerializer):
 class EstadoOCSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadoOC
+        fields = '__all__'
+
+
+class PermisoContratoUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PermisoContratoUser
         fields = '__all__'

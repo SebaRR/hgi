@@ -2,6 +2,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
+from hgi_static.permiso_contrato_user_view import PermisoContratoUserViewSet
+from hgi_users.permiso_contrato_view import PermisoContratoViewSet
 from hgi_ventas.item_recurso import ItemRecursoViewSet
 from hgi_ventas.caja_chica import CajaChicaViewSet
 from hgi_ventas.estado_cchica import EstadoCajaChicaViewSet
@@ -65,6 +67,8 @@ router.register(r"item_cch", ItemCajaChicaViewSet)
 router.register(r"tipo_doc", TipoDocumentoViewSet)
 router.register(r"caja_chica", CajaChicaViewSet)
 router.register(r"estado_cch", EstadoCajaChicaViewSet)
+router.register(r"permiso_cuser", PermisoContratoUserViewSet)
+router.register(r"permiso_contrato", PermisoContratoViewSet)
 
 slashless_router = routers.SimpleRouter(trailing_slash=False)
 slashless_router.registry = router.registry[:]

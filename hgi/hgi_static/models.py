@@ -2,6 +2,7 @@ from datetime import datetime
 from django.db import models
 
 from hgi_users.models import Client, User
+from django.contrib.postgres.fields import ArrayField
 
 """
 class Banco(models.Model):
@@ -113,8 +114,11 @@ class EstadoOC(models.Model):
     orden = models.IntegerField()
 
 
-
+class PermisoContratoUser(models.Model):
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True)
+    permisos = ArrayField(models.IntegerField(null=True), default=list)
 
 #tabla de registro de cambios de estado en un contrato 
 
-#gestion proa -> 

@@ -1,4 +1,5 @@
 
+from hgi_users.models import PermisoContrato
 from hgi_users.models import Country, City, Proveedor, Region, Client, User, UserToken, CargoUser
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -97,4 +98,9 @@ class ProveedorSerializer(serializers.ModelSerializer):
 class CargoUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CargoUser
+        fields = '__all__'
+
+class PermisoContratoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PermisoContrato
         fields = '__all__'
