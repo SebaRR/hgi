@@ -1,5 +1,6 @@
 
 from django.contrib import admin
+from hgi_users.models import PermisoContrato
 from hgi_users.models import City, UserToken, Region, Client, User, Country, CargoUser, Proveedor
 
 class UserAdmin(admin.ModelAdmin):
@@ -22,6 +23,10 @@ class ProveedorAdmin(admin.ModelAdmin):
     class meta:
         model = Proveedor
 
+class PermisoContratoAdmin(admin.ModelAdmin):
+    list_display = ["id", "nombre", "ver_vb", "modificar_vb", "ver_contrato", "modificar_contrato", "ver_ppto", "modificar_ppto", "ver_oc", "modificar_oc", "mano_obra", "ver_cch", "modificar_cch"]
+    class meta:
+        model = PermisoContrato 
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Client, ClientAdmin)
@@ -31,3 +36,4 @@ admin.site.register(UserToken)
 admin.site.register(Country)
 admin.site.register(CargoUser, CargoUserAdmin)
 admin.site.register(Proveedor, ProveedorAdmin)
+admin.site.register(PermisoContrato, PermisoContratoAdmin)
