@@ -16,6 +16,10 @@ class PermisoContrato(models.Model):
     mano_obra = models.BooleanField(default=False) #True if can see this type
     ver_cch = models.BooleanField(default=False)
     modificar_cch = models.BooleanField(default=False)
+    ver_ccr = models.BooleanField(default=False)
+    modificar_ccr = models.BooleanField(default=False)
+    ver_ccp = models.BooleanField(default=False)
+    modificar_ccp = models.BooleanField(default=False)
 
 class CargoUser(models.Model):
     
