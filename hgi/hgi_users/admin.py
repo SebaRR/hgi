@@ -24,7 +24,7 @@ class ProveedorAdmin(admin.ModelAdmin):
         model = Proveedor
 
 class PermisoContratoAdmin(admin.ModelAdmin):
-    list_display = ["id", "nombre", "ver_vb", "modificar_vb", "ver_contrato", "modificar_contrato", "ver_ppto", "modificar_ppto", "ver_oc", "modificar_oc", "mano_obra", "ver_cch", "modificar_cch", "ver_ccr", "modificar_ccr"; "ver_ccp", "modificar_ccp"]
+    list_display = ["id", "nombre", "ver_vb", "modificar_vb", "ver_contrato", "modificar_contrato", "ver_ppto", "modificar_ppto", "ver_oc", "modificar_oc", "mano_obra", "ver_cch", "modificar_cch", "ver_ccr", "modificar_ccr", "ver_ccp", "modificar_ccp"]
     class meta:
         model = PermisoContrato 
 
