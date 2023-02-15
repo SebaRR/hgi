@@ -74,7 +74,7 @@ class UserSerializer(FlexFieldsModelSerializer):
             for id_permiso in permiso["permisos"]:
                 permiso_contrato_data = PermisoContratoSerializer(PermisoContrato.objects.get(id=id_permiso)).data
                 permiso_contrato[permiso_contrato_data["nombre"]] = permiso_contrato_data
-            permiso_contrato_user[permiso["contrato"]]
+            permiso_contrato_user[permiso["contrato"]] = permiso_contrato
         return permiso_contrato_user
 
 
