@@ -1,4 +1,6 @@
 
+from hgi_static.serializer import PermisoContratoUserSerializer
+from hgi_static.models import PermisoContratoUser
 from hgi_users.models import PermisoContrato
 from hgi_users.models import Country, City, Proveedor, Region, Client, User, UserToken, CargoUser
 from rest_framework import serializers
@@ -6,6 +8,11 @@ from rest_framework.authtoken.models import Token
 from rest_flex_fields import FlexFieldsModelSerializer
 from django.core.exceptions import ObjectDoesNotExist
 
+
+class PermisoContratoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PermisoContrato
+        fields = '__all__'
 
 class CreateUserSerializer(FlexFieldsModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -42,6 +49,7 @@ class CreateUserSerializer(FlexFieldsModelSerializer):
 
 class UserSerializer(FlexFieldsModelSerializer):
     password = serializers.CharField(write_only=True)
+    permiso_contrato = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -56,6 +64,19 @@ class UserSerializer(FlexFieldsModelSerializer):
         except ObjectDoesNotExist:
             token = Token.objects.create(user=self.instance)
         return token
+    
+    def get_permiso_contrato(self, instance):
+        permisos = PermisoContratoUser.objects.filter(user=instance.id)
+        permisos = PermisoContratoUserSerializer(permisos, many=True).data
+        permiso_contrato_user = {}
+        for permiso in permisos:
+            permiso_contrato = {}
+            for id_permiso in permiso["permisos"]:
+                permiso_contrato_data = PermisoContratoSerializer(PermisoContrato.objects.get(id=id_permiso)).data
+                permiso_contrato[permiso_contrato_data["nombre"]] = permiso_contrato_data
+            permiso_contrato_user[permiso["contrato"]]
+        return permiso_contrato_user
+
 
 
 class UserTokenSerializer(serializers.ModelSerializer):
@@ -100,7 +121,3 @@ class CargoUserSerializer(serializers.ModelSerializer):
         model = CargoUser
         fields = '__all__'
 
-class PermisoContratoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PermisoContrato
-        fields = '__all__'
