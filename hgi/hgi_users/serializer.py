@@ -55,7 +55,7 @@ class UserSerializer(FlexFieldsModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'is_superuser', 'position',
                   'first_name', 'first_last_name', 'second_last_name','active',
-                  'password', 'created_at', 'updated_at', 'phone_number', 'rut', 'codigo')
+                  'password', 'created_at', 'updated_at', 'phone_number', 'rut', 'codigo', 'permiso_contrato')
         read_only_fields = ('created_at', 'updated_at',)
     
     def get_token(self):
