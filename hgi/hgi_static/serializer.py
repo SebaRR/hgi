@@ -1,4 +1,6 @@
 
+from hgi_static.models import PermisoContratoUser
+from hgi_ventas.models import ProductoOC
 from hgi_ventas.models import Presupuesto, Partida
 from hgi_static.models import Contrato, Obra, TipoPresupuesto, ClasiContrato, EstadoContrato, EstadoOC, Moneda, TipoContrato, TipoPago
 from rest_framework import serializers
@@ -8,6 +10,9 @@ from rest_flex_fields import FlexFieldsModelSerializer
 class ContratoSerializer(serializers.ModelSerializer):
     total_pro = serializers.SerializerMethodField()
     total_prm = serializers.SerializerMethodField()
+    total_partidas = serializers.SerializerMethodField()
+    n_partidas = serializers.SerializerMethodField()
+    total_apu = serializers.SerializerMethodField()
 
     class Meta:
         model = Contrato
@@ -32,6 +37,34 @@ class ContratoSerializer(serializers.ModelSerializer):
         except Presupuesto.DoesNotExist:
             return total
         return total
+    
+    def get_total_partidas(self, instance):
+        total = 0
+        try:
+            partidas = Partida.objects.filter(contrato=instance.id)
+            for partida in partidas:
+                total += partida.ingresado
+        except Presupuesto.DoesNotExist:
+            return total
+        return total
+
+    def get_n_partidas(self, instance):
+        try:
+            partidas = Partida.objects.filter(contrato=instance.id)
+            return partidas.count()
+        except Partida.DoesNotExist:
+            return 0
+    
+    def get_total_apu(self, instance):
+        total = 0
+        try:
+            productos = ProductoOC.objects.filter(partida__contrato=instance.id)
+            for producto in productos:
+                total += producto.total_precio()
+        except ProductoOC.DoesNotExist:
+            return total
+        return total
+        
 
 
 class ObraSerializer(serializers.ModelSerializer):
@@ -79,4 +112,10 @@ class MonedaSerializer(serializers.ModelSerializer):
 class EstadoOCSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadoOC
+        fields = '__all__'
+
+
+class PermisoContratoUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PermisoContratoUser
         fields = '__all__'

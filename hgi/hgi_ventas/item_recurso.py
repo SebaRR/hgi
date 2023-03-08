@@ -35,6 +35,10 @@ class ItemRecursoViewSet(viewsets.ModelViewSet):
         if 'partida' in self.request.query_params.keys():
             partida = self.request.query_params['partida']
             items = items.filter(partida = partida)
+
+        if 'prodrecurso' in self.request.query_params.keys():
+            prodrecurso = self.request.query_params['prodrecurso']
+            items = items.filter(recurso = prodrecurso)
             
         return items
 

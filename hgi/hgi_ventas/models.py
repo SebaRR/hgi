@@ -211,6 +211,6 @@ class ItemCajaChica(models.Model):
     creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     caja_chica = models.ForeignKey(CajaChica, on_delete=models.CASCADE, null=False)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, null=False)
-    recurso = models.ForeignKey(ProdRecurso, on_delete=models.CASCADE, null=False)
+    recurso = models.ForeignKey(Recurso, on_delete=models.CASCADE, null=False)
 
     fecha = models.DateTimeField(auto_now_add=True) 

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from hgi_static.models import PermisoContratoUser
 from hgi_static.models import Contrato, Obra, TipoPresupuesto, ClasiContrato, EstadoContrato, EstadoOC, Moneda, TipoContrato, TipoPago, EstadoObra
 
 class ContratoAdmin(admin.ModelAdmin):
@@ -41,6 +42,12 @@ class EstadoObraAdmin(admin.ModelAdmin):
     class meta:
         model = EstadoObra
 
+class PermisoContratoUserAdmin(admin.ModelAdmin):
+    list_display = ["id", "user", "contrato", "permisos"]
+    class meta:
+        model = PermisoContratoUser
+
+
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(Obra, ObraAdmin)
 admin.site.register(TipoPresupuesto, TipoPresupuestoAdmin)
@@ -51,5 +58,5 @@ admin.site.register(TipoPago)
 admin.site.register(Moneda)
 admin.site.register(EstadoOC, EstadoOCAdmin)
 admin.site.register(EstadoObra, EstadoObraAdmin)
-
+admin.site.register(PermisoContratoUser, PermisoContratoUserAdmin)
 
