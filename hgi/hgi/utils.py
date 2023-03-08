@@ -83,5 +83,5 @@ def add_info_oc(oc, oc_data):
     oc_data['nombre_estado'] = oc.estado.nombre
     oc_data['nombre_forma_pago'] = oc.forma_pago.descripcion
     oc_data['nombre_tipo'] = oc.tipo.descripcion
-    oc_data['nombre_moneda'] = oc.moneda.simbolo
+    oc_data['nombre_moneda'] = oc.moneda.simbolo 
     return
