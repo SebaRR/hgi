@@ -97,14 +97,15 @@ class Client(models.Model):
     business_name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     commune = models.CharField(max_length=100)
-    
+    code = models.CharField(max_length=3, null=True, blank=True)
     activity = models.CharField(max_length=100)
     rut = models.CharField(max_length=20)
     phone = models.CharField(max_length=20)
     country = models.CharField(max_length=20,choices=country_choices, default='Chile',)
     active = models.BooleanField(default=True)
+    email = models.EmailField(null=True, blank=True)
+    contact = models.CharField(max_length=20, default='Nombre Cliente')
 
-    contact = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     region = models.ForeignKey(Region, on_delete=models.CASCADE, null=False, blank=False)
     city = models.ForeignKey(City, on_delete=models.CASCADE, null=False, blank=False)
 
@@ -126,6 +127,8 @@ class Proveedor(models.Model):
     credito = models.IntegerField()
     cuenta = models.CharField(max_length=20)
     activo = models.BooleanField(default=True)
+    banco = models.CharField(max_length=20, null=True, blank=True)
+    tipo_cuenta = models.CharField(max_length=20, null=True, blank=True)
 
     ciudad = models.ForeignKey(City, on_delete=models.CASCADE, null=False, blank=False)
     region = models.ForeignKey(Region, on_delete=models.CASCADE, null=False, blank=False)

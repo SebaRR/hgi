@@ -9,11 +9,10 @@ class Presupuesto(models.Model):
     pre = models.IntegerField(null=False)
     prm = models.IntegerField(null=False) #Cobrar
     pro = models.IntegerField(null=False) #Gastar - rige ordenes de compra
-    ing = models.IntegerField(null=False)
     ccp = models.CharField(max_length=10, null=False)
 
     tipo = models.ForeignKey(TipoPresupuesto, on_delete=models.CASCADE, null=False)
-    
+    fecha_ingreso = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
 
@@ -55,7 +54,7 @@ class OrdenCompra(models.Model):
     autorizacion_res = models.BooleanField(default=False) #user R
 
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, null=False)
-    estado = models.ForeignKey(EstadoOC, on_delete=models.CASCADE, null=False) 
+    estado = models.ForeignKey(EstadoOC, on_delete=models.CASCADE, null=False, default=7) 
     forma_pago = models.ForeignKey(TipoPago, on_delete=models.CASCADE, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
     emisor = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="emisor_oc")  # emisor -> la necesita
@@ -63,7 +62,6 @@ class OrdenCompra(models.Model):
     tipo = models.ForeignKey(TipoOC, on_delete=models.CASCADE, null=False, default=6)
     moneda = models.ForeignKey(Moneda, on_delete=models.CASCADE, null=False)
 
-    fecha_ingreso = models.DateTimeField(auto_now_add=True)
     fecha_despacho = models.DateTimeField(auto_now_add=True) # fecha creacion - editable
     fecha = models.DateTimeField(auto_now_add=True) # fecha creacion - editable
 
@@ -80,7 +78,6 @@ class Partida(models.Model):
     codigo = models.CharField(max_length=10, null=True, blank=True)
     descripcion = models.CharField(max_length=90, null=True, blank=True)
     total = models.IntegerField()
-    ingresado = models.IntegerField()
 
     creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
@@ -175,9 +172,9 @@ class EstadoCajaChica(models.Model):
 class CajaChica(models.Model):
 
     fecha = models.DateTimeField(auto_now_add=True) 
-    aut = models.IntegerField()
-    total = models.IntegerField() #total de los productos que contiene
-    estado = models.ForeignKey(EstadoCajaChica, on_delete=models.CASCADE, null=False)
+    aut = models.IntegerField(null=True, blank=True)
+    total = models.IntegerField(null=True, blank=True) #total de los productos que contiene
+    estado = models.ForeignKey(EstadoCajaChica, on_delete=models.CASCADE, null=False, default=1)
     creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
     oc = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE, null=True)
@@ -203,9 +200,10 @@ class TipoDocumento(models.Model):
 class ItemCajaChica(models.Model):
 
     detalle = models.CharField(max_length=70, null=True, blank=True)
-    orden = models.IntegerField()
+    orden = models.IntegerField(null=True, blank=True)
     total = models.IntegerField()
     ie = models.IntegerField(null=True, blank=True) #gasto en caso de petroleo - bencina
+    numero = models.IntegerField(null=True, blank=True)
 
     tipo = models.ForeignKey(TipoDocumento, on_delete=models.CASCADE, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)

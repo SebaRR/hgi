@@ -7,7 +7,7 @@ class ContratoAdmin(admin.ModelAdmin):
         model = Contrato
 
 class ObraAdmin(admin.ModelAdmin):
-    list_display = ["id", "codigo", "nombre", "cliente", "estado", "creador"]
+    list_display = ["id", "codigo", "nombre", "cliente", "creador"]
     class meta:
         model = Obra
 

@@ -22,7 +22,7 @@ class Obra(models.Model):
     activo = models.BooleanField(default=True)
     creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     cliente = models.ForeignKey(Client, on_delete=models.CASCADE, null=False)
-    estado = models.ForeignKey(EstadoObra, on_delete=models.CASCADE, null=False)
+    #estado = models.ForeignKey(EstadoObra, on_delete=models.CASCADE, null=False)
     fecha = models.DateTimeField(auto_now_add=True, null=True)
 
 
@@ -54,7 +54,7 @@ class Contrato(models.Model):
 
     par = models.BooleanField(default=False) #cargo por partida
     mat = models.BooleanField(default=False) #cargo por recurso
-    mau = models.BooleanField(default=False) #autorizacion oc
+    mau = models.IntegerField(default=0) #autorizacion oc
     auo = models.BooleanField(default=False) #autorizar dcs de obra, no aplica (doctos = factura)
     proa = models.BooleanField(default=False) #controlar disponible
     oc = models.BooleanField(default=False) #oc obligatorio (factura) doctos con oc
@@ -63,7 +63,7 @@ class Contrato(models.Model):
     sa = models.IntegerField(default=0) #controla sa (no aun)
     m2 = models.IntegerField(null=True) #dato
     peso = models.IntegerField(null=True) #dato
-    ccp = models.IntegerField(default=0) #ccp por venta (dato) booleano
+    ccp = models.BooleanField(default=False)
     
     estado = models.ForeignKey(EstadoContrato, on_delete=models.CASCADE, null=False)
     tipo = models.ForeignKey(TipoContrato, on_delete=models.CASCADE, null=False, default=6) 
@@ -112,9 +112,4 @@ class EstadoOC(models.Model):
     nombre = models.CharField(max_length=20, null=False)
     orden = models.IntegerField()
 
-
-
-
 #tabla de registro de cambios de estado en un contrato 
-
-#gestion proa -> 

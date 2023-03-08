@@ -27,7 +27,7 @@ class ProductoOCAdmin(admin.ModelAdmin):
         model = ProductoOC
 
 class PartidaAdmin(admin.ModelAdmin):
-    list_display = ["id", "codigo", "total", "ingresado", "creador", "contrato", "inicio", "termino"]
+    list_display = ["id", "codigo", "total", "creador", "contrato", "inicio", "termino"]
     class meta:
         model = Partida
 

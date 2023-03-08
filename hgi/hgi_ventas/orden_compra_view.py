@@ -39,7 +39,7 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
         return JsonResponse({"orden_compra":oc_data}, status=200)
     
     def get_queryset(self):
-        self.get_queryset = OrdenCompra.objects.all()
+        self.get_queryset = OrdenCompra.objects.all().order_by('-fecha')
         oc = self.queryset
         if 'proveedor' in self.request.query_params.keys():
             proveedor = self.request.query_params['proveedor']
