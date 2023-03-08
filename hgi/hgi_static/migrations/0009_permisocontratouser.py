@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('hgi_static', '0008_auto_20230210_2153'),
+        ('hgi_static', '0009_permisocontratouser'),
     ]
 
     operations = [
