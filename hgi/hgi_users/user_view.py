@@ -54,6 +54,15 @@ class UserViewSet(viewsets.ModelViewSet):
             return JsonResponse({"status_text": "Usuario editado con exito.", "user": data_user,},status=202)
         else:
             return JsonResponse({"status_text": str(serializer.errors)}, status=400)
+    
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+        if user.id == 1:
+            return JsonResponse({"status_text": "No se puede eliminar este usuario."}, status=400)
+        else:
+            user.delete()
+            return JsonResponse({"status_text": "Usuario eliminado."}, status=202)
+
 
 
 
