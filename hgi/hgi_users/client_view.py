@@ -31,8 +31,6 @@ class ClientViewSet(viewsets.ModelViewSet):
         self.queryset = Client.objects.all()
         client = self.get_object()
         data_client = self.serializer_class(client).data
-        contact = User.objects.get(id=data_client['contact'])
-        data_client['contact_name'] = contact.short_name()
         return JsonResponse({"client":data_client}, status=200)
         
     def list(self, request):
@@ -49,9 +47,6 @@ class ClientViewSet(viewsets.ModelViewSet):
         clients_all = pages.page(out_pag).object_list
         serializer = self.serializer_class(clients_all, many=True)
         response_data = serializer.data
-        for client in response_data:
-            contact = User.objects.get(id=client['contact'])
-            client['contact_name'] = contact.short_name()
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
 
     def partial_update(self, request, pk, *args, **kwargs):
