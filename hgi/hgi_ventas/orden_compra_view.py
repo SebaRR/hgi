@@ -206,9 +206,9 @@ def oc_por_autorizar(request):
     else:
         return JsonResponse ({'status_text':'No usaste token'}, status=403)
     oc_adm = OrdenCompra.objects.filter(contrato__administrador__id=user.id).filter(autorizacion_adm=False)
-    oc_res = OrdenCompra.objects.filter(Q(contrato__responsable__id=user.id) | Q(contrato__visitador__id=user.id))
+    oc_res = OrdenCompra.objects.filter(Q(contrato__responsable__id=user.id) | Q(contrato__visitador__id=user.id)).filter(autorizacion_res=False)
     model_combination = list(chain(oc_adm, oc_res))
-    oc_list = model_combination.values("id").distinct()
+    oc_list = list(set(model_combination))
     oc_list_data = OrdenCompraSerializer(oc_list, many=True).data
     return JsonResponse ({'status_text':'OC por autorizar', 'oc':oc_list_data}, status=200)
 
