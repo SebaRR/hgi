@@ -41,7 +41,7 @@ class RecursoViewSet(viewsets.ModelViewSet):
     
     def list(self, request):
         recursos = self.get_queryset()
-        pages = Paginator(recursos.order_by('created_at').reverse(), 99999)
+        pages = Paginator(recursos, 99999)
         out_pag = 1
         total_pages = pages.num_pages
         count_objects = pages.count
