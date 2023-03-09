@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
+from hgi_ventas import orden_compra_view
 from hgi_static.permiso_contrato_user_view import PermisoContratoUserViewSet
 from hgi_users.permiso_contrato_view import PermisoContratoViewSet
 from hgi_ventas.item_recurso import ItemRecursoViewSet
@@ -83,5 +84,7 @@ urlpatterns = [
     path('logout', user_view.logout_v1, name='logout'),
     path('load_user', user_view.load_user, name='load_user'),
     
+    #_____ Orden de Compra _____________
+    path('oc_por_autorizar', orden_compra_view.oc_por_autorizar, name="oc_por_autorizar"),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

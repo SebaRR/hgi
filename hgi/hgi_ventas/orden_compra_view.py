@@ -22,7 +22,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.paginator import Paginator
 from django.db.models import Q
-
+from itertools import chain
 
 class OrdenCompraViewSet(viewsets.ModelViewSet):
     queryset = OrdenCompra.objects.all()
@@ -198,4 +198,17 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
         
         
 
-        
+@csrf_exempt
+@api_view(["GET"])
+def oc_por_autorizar(request):
+    if 'Authorization' in request.headers:
+            user = get_user_from_usertoken(request.headers['Authorization'])
+    else:
+        return JsonResponse ({'status_text':'No usaste token'}, status=403)
+    oc_adm = OrdenCompra.objects.filter(contrato__administrador__id=user.id).filter(autorizacion_adm=False)
+    oc_res = OrdenCompra.objects.filter(Q(contrato__responsable__id=user.id) | Q(contrato__visitador__id=user.id))
+    model_combination = list(chain(oc_adm, oc_res))
+    oc_list = model_combination.values("id").distinct()
+    oc_list_data = OrdenCompraSerializer(oc_list, many=True).data
+    return JsonResponse ({'status_text':'OC por autorizar', 'oc':oc_list_data}, status=200)
+
