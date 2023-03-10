@@ -39,7 +39,7 @@ class ContratoSerializer(serializers.ModelSerializer):
         return total
     
     def get_total_partidas(self, instance):
-        total = 0
+        total = 0 
         try:
             partidas = Partida.objects.filter(contrato=instance.id)
             for partida in partidas:
