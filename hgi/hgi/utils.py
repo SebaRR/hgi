@@ -57,22 +57,15 @@ def can_accept_oc(oc):
     return can, part_dict
 
 
-def update_ingreso_partida(oc_data): 
-    productos = ProductoOC.objects.filter(oc=oc_data['id'])
-    for product in productos:
-        partida = Partida.objects.get(id=product.partida)
-        partida.ingresado += product.total_precio()
-        partida.save()
-    return
-
-
 def get_total_partidas_APU(partidas):
     partidas = PartidaSerializer(partidas, many=True).data
     total_partidas = 0
     total_ingresado = 0
     for partida in partidas:
         total_partidas += partida['total']
-        total_ingresado += partida['ingresado']
+        productos = ProductoOC.objects.filter(partida=partida)
+        for producto in productos:
+            total_ingresado += producto.total_precio()
     return total_partidas, total_ingresado
 
 def add_info_oc(oc, oc_data):
