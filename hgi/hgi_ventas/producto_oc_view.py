@@ -54,7 +54,7 @@ class ProductoOCViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         productos = self.get_queryset()
-        pages = Paginator(productos.order_by('fecha_ingreso').reverse(), 25)
+        pages = Paginator(productos.order_by('fecha_ingreso').reverse(), 99999)
         out_pag = 1
         total_pages = pages.num_pages
         count_objects = pages.count

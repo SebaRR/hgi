@@ -45,7 +45,7 @@ class ItemRecursoViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         items = self.get_queryset()
-        pages = Paginator(items.order_by('fecha').reverse(), 25)
+        pages = Paginator(items.order_by('fecha').reverse(), 99999)
         out_pag = 1
         total_pages = pages.num_pages
         count_objects = pages.count

@@ -40,7 +40,7 @@ class PermisoContratoUserViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         permisos = self.get_queryset()
-        pages = Paginator(permisos.reverse(), 25)
+        pages = Paginator(permisos.reverse(), 99999)
         out_pag = 1
         total_pages = pages.num_pages
         count_objects = pages.count

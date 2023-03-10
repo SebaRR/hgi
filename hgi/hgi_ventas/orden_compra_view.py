@@ -77,7 +77,7 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
             if user_can_see_oc(user, oc):
                 final_oc_list.append(oc)
 
-        pages = Paginator(final_oc_list, 20)
+        pages = Paginator(final_oc_list, 99999)
         out_pag = 1
         total_pages = pages.num_pages
         count_objects = pages.count

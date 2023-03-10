@@ -56,7 +56,7 @@ class PresupuestoViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         presupuestos = self.get_queryset()
-        pages = Paginator(presupuestos.reverse(), 25)
+        pages = Paginator(presupuestos.reverse(), 99999)
         out_pag = 1
         total_pages = pages.num_pages
         count_objects = pages.count

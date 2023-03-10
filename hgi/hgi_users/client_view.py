@@ -35,7 +35,7 @@ class ClientViewSet(viewsets.ModelViewSet):
         
     def list(self, request):
         clients = self.get_queryset()
-        pages = Paginator(clients.order_by('created_at').reverse(), 25)
+        pages = Paginator(clients.order_by('created_at').reverse(), 99999)
         out_pag = 1
         total_pages = pages.num_pages
         count_objects = pages.count
