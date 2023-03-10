@@ -152,6 +152,6 @@ class Proveedor(models.Model):
     ciudad = models.ForeignKey(City, on_delete=models.CASCADE, null=False, blank=False)
     region = models.ForeignKey(Region, on_delete=models.CASCADE, null=False, blank=False)
     pais = models.ForeignKey(Country, on_delete=models.CASCADE, null=False, blank=False)
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False, blank=False)
     fecha_creado = models.DateTimeField(auto_now_add=True)
     fecha_editado = models.DateTimeField(null=True, blank=True)

@@ -13,7 +13,7 @@ class Presupuesto(models.Model):
 
     tipo = models.ForeignKey(TipoPresupuesto, on_delete=models.CASCADE, null=False)
     fecha_ingreso = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    usuario = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
 
 
@@ -33,7 +33,7 @@ class TipoOC(models.Model):
     ope = models.IntegerField(null=True, blank=True)
     nco = models.CharField(max_length=3, null=True, blank=True)
     col = models.CharField(max_length=6, null=True, blank=True)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    usuario = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
 
 
 
@@ -57,8 +57,8 @@ class OrdenCompra(models.Model):
     estado = models.ForeignKey(EstadoOC, on_delete=models.CASCADE, null=False, default=7) 
     forma_pago = models.ForeignKey(TipoPago, on_delete=models.CASCADE, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
-    emisor = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="emisor_oc")  # emisor -> la necesita
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="creador_oc") # quien la hizo
+    emisor = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False, related_name="emisor_oc")  # emisor -> la necesita
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False, related_name="creador_oc") # quien la hizo
     tipo = models.ForeignKey(TipoOC, on_delete=models.CASCADE, null=False, default=6)
     moneda = models.ForeignKey(Moneda, on_delete=models.CASCADE, null=False)
 
@@ -79,7 +79,7 @@ class Partida(models.Model):
     descripcion = models.CharField(max_length=90, null=True, blank=True)
     total = models.IntegerField()
 
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
 
     inicio = models.DateTimeField(auto_now_add=True)
@@ -102,7 +102,7 @@ class ProdRecurso(models.Model):
 
     partida = models.ForeignKey(Partida, on_delete=models.CASCADE, null=False)
     recurso = models.ForeignKey(Recurso, on_delete=models.CASCADE, null=False)
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     inicio = models.DateTimeField(auto_now_add=True)
     termino = models.DateTimeField(null=True)
 
@@ -122,7 +122,7 @@ class ItemRecurso(models.Model):
     recurso = models.ForeignKey(ProdRecurso, on_delete=models.CASCADE, null=False)
     partida = models.ForeignKey(Partida, on_delete=models.CASCADE, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     
     def total_precio(self):
         total = self.cantidad * self.precio    
@@ -147,7 +147,7 @@ class ProductoOC(models.Model):
 
     recurso = models.ForeignKey(ProdRecurso, on_delete=models.CASCADE, null=False)
     partida = models.ForeignKey(Partida, on_delete=models.CASCADE, null=False)
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     unidad = models.ForeignKey(UnidadProducto, on_delete=models.CASCADE, null=False)
     oc = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE, null=False)
 
@@ -166,7 +166,7 @@ class EstadoCajaChica(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     oba = models.CharField(max_length=15, null=True, blank=True)
 
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
 
 
 class CajaChica(models.Model):
@@ -176,7 +176,7 @@ class CajaChica(models.Model):
     total = models.IntegerField(null=True, blank=True) #total de los productos que contiene
     estado = models.ForeignKey(EstadoCajaChica, on_delete=models.CASCADE, null=False, default=1)
     creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
-    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
+    contrato = models.ForeignKey(Contrato, on_delete=models.SET_DEFAULT, default=1, null=False)
     oc = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE, null=True)
 
 
@@ -208,7 +208,7 @@ class ItemCajaChica(models.Model):
     tipo = models.ForeignKey(TipoDocumento, on_delete=models.CASCADE, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
     partida = models.ForeignKey(Partida, on_delete=models.CASCADE, null=False)
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     caja_chica = models.ForeignKey(CajaChica, on_delete=models.CASCADE, null=False)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, null=False)
     recurso = models.ForeignKey(Recurso, on_delete=models.CASCADE, null=False)

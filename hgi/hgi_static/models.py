@@ -21,7 +21,7 @@ class Obra(models.Model):
     codigo = models.CharField(max_length=6, null=False)
     nombre = models.CharField(max_length=50, null=False)
     activo = models.BooleanField(default=True)
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     cliente = models.ForeignKey(Client, on_delete=models.CASCADE, null=False)
     #estado = models.ForeignKey(EstadoObra, on_delete=models.CASCADE, null=False)
     fecha = models.DateTimeField(auto_now_add=True, null=True)
@@ -77,7 +77,7 @@ class Contrato(models.Model):
     compras = models.ForeignKey(User, related_name='user_compras', on_delete=models.CASCADE, null=False)
     administrativo = models.ForeignKey(User, related_name='user_administrativo', on_delete=models.CASCADE, null=False)
     prevencionista = models.ForeignKey(User, related_name='user_prevencionista', on_delete=models.CASCADE, null=False)
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
 
     inicio = models.DateTimeField(auto_now_add=True, null=False)
     termino = models.DateTimeField(null=True)
@@ -89,7 +89,7 @@ class TipoPresupuesto(models.Model):
     diminutivo = models.CharField(max_length=3, null=False)
     operacion = models.IntegerField(null=False)
     orden = models.IntegerField(null=False)
-    creador = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE, null=False)
+    creador = models.ForeignKey(User, related_name='user', on_delete=models.SET_DEFAULT, default=1, null=False)
 
 
 class TipoPago(models.Model):
@@ -98,7 +98,7 @@ class TipoPago(models.Model):
     dias = models.IntegerField()
     orden = models.IntegerField()
 
-    creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False) 
+    creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False) 
 
 
 class Moneda(models.Model):
@@ -115,7 +115,7 @@ class EstadoOC(models.Model):
 
 class PermisoContratoUser(models.Model):
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    user = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True)
     permisos = ArrayField(models.IntegerField(null=True), default=list)
 
