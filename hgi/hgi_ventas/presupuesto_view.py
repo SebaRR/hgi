@@ -27,7 +27,7 @@ class PresupuestoViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny,]
     serializer_class = PresupuestoSerializer
     http_method_names = ["get", "patch", "delete", "post"]
-
+  
     def retrieve(self, request, pk):
         self.queryset = Presupuesto.objects.all()
         ppto = self.get_object()
