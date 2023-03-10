@@ -43,8 +43,10 @@ class ContratoSerializer(serializers.ModelSerializer):
         try:
             partidas = Partida.objects.filter(contrato=instance.id)
             for partida in partidas:
-                total += partida.ingresado
-        except Presupuesto.DoesNotExist:
+                productos = ProductoOC.objects.filter(partida=partida)
+                for producto in productos:
+                    total += producto.total_precio()
+        except Partida.DoesNotExist:
             return total
         return total
 
