@@ -144,7 +144,7 @@ class ProductoOC(models.Model):
     moc = models.IntegerField(null=True, blank=True) # 0 
     ant = models.IntegerField(null=True, blank=True) # 0
 
-    recurso = models.ForeignKey(ProdRecurso, on_delete=models.CASCADE, null=False)
+    recurso = models.ForeignKey(Recurso, on_delete=models.CASCADE, null=False)
     partida = models.ForeignKey(Partida, on_delete=models.CASCADE, null=False)
     creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     unidad = models.ForeignKey(UnidadProducto, on_delete=models.CASCADE, null=False)
