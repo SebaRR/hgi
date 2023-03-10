@@ -63,7 +63,7 @@ def get_total_partidas_APU(partidas):
     total_ingresado = 0
     for partida in partidas:
         total_partidas += partida['total']
-        productos = ProductoOC.objects.filter(partida=partida)
+        productos = ProductoOC.objects.filter(partida=partida['id'])
         for producto in productos:
             total_ingresado += producto.total_precio()
     return total_partidas, total_ingresado
