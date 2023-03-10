@@ -1,4 +1,5 @@
  
+from hgi.utils import get_user_from_usertoken
 from hgi_ventas.serializer import PresupuestoSerializer
 from hgi_ventas.models import Presupuesto
 from hgi_static.models import Contrato, EstadoContrato, Obra
@@ -58,6 +59,25 @@ class ContratoViewSet(viewsets.ModelViewSet):
             contrato['obra_name'] = obra.nombre
         
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
+    
+    def create(self, request):
+        try:
+            data = json.loads(request.body)
+        except JSONDecodeError as error:
+            return JsonResponse({'Request error': str(error)},status=400)
+        if "creador" not in data.keys():
+            if 'Authorization' in request.headers:
+                user = get_user_from_usertoken(request.headers['Authorization'])
+                data['creador'] = user.id
+            else:
+                return JsonResponse ({'status_text':'No usaste token'}, status=403)
+        serializer = self.serializer_class(data = data)
+        if serializer.is_valid():
+            serializer.save()
+            contrato_data = serializer.data
+            response = {'contrato': contrato_data}
+            return JsonResponse(response, status=201)
+        return JsonResponse({'status_text': str(serializer.errors)}, status=400)
     
     def destroy(self, request, *args, **kwargs):
         self.queryset = Contrato.objects.all()

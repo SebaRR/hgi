@@ -113,8 +113,11 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
             user = get_user_from_usertoken(request.headers['Authorization'])
         else:
             return JsonResponse ({'status_text':'No usaste token'}, status=403)
-
-        data['creador'] = user.id
+        
+        if "creador" not in data.keys():
+            data['creador'] = user.id
+        if "emisor" not in data.keys():
+            data['emisor'] = user.id
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             serializer.save()

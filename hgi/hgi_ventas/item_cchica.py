@@ -87,7 +87,10 @@ class ItemCajaChicaViewSet(viewsets.ModelViewSet):
             user = get_user_from_usertoken(request.headers['Authorization'])
         else:
             return JsonResponse ({'status_text':'No usaste token'}, status=403)
-
+        
+        if "creador" not in data.keys():
+            data['creador'] = user.id
+            
         caja_chica = CajaChica.objects.get(id=data['caja_chica'])
         data['contrato'] = caja_chica.contrato.id
         serializer = self.serializer_class(data=data)

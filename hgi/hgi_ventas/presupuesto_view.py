@@ -1,4 +1,5 @@
 
+from hgi.utils import get_user_from_usertoken
 from hgi.utils import get_total_partidas_APU
 from hgi_ventas.models import Partida
 from hgi_static.serializer import TipoPresupuestoSerializer
@@ -87,3 +88,22 @@ class PresupuestoViewSet(viewsets.ModelViewSet):
             return JsonResponse({"status_text": "Presupuesto editado con exito.", "presupuesto": data_ppto,},status=202)
         else:
             return JsonResponse({"status_text": str(serializer.errors)}, status=400) 
+    
+    def create(self, request):
+        try:
+            data = json.loads(request.body)
+        except JSONDecodeError as error:
+            return JsonResponse({'Request error': str(error)},status=400)
+        if "usuario" not in data.keys():
+            if 'Authorization' in request.headers:
+                user = get_user_from_usertoken(request.headers['Authorization'])
+                data['usuario'] = user.id
+            else:
+                return JsonResponse ({'status_text':'No usaste token'}, status=403)
+        serializer = self.serializer_class(data = data)
+        if serializer.is_valid():
+            serializer.save()
+            presupuesto_data = serializer.data
+            response = {'presupuesto': presupuesto_data}
+            return JsonResponse(response, status=201)
+        return JsonResponse({'status_text': str(serializer.errors)}, status=400)

@@ -57,7 +57,7 @@ class UserViewSet(viewsets.ModelViewSet):
     
     def destroy(self, request, *args, **kwargs):
         user = self.get_object()
-        if user.id == 1:
+        if user.id == 1 or user.is_superuser:
             return JsonResponse({"status_text": "No se puede eliminar este usuario."}, status=400)
         else:
             user.delete()

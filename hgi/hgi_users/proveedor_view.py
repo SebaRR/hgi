@@ -1,5 +1,6 @@
 
 
+from hgi.utils import get_user_from_usertoken
 from hgi_users.models import Proveedor
 from hgi_users.serializer import ProveedorSerializer
 from rest_framework.decorators import (
@@ -27,3 +28,22 @@ class ProveedorViewSet(viewsets.ModelViewSet):
         ppto = self.get_object()
         data_ppto = self.serializer_class(ppto).data
         return JsonResponse({"proveedor":data_ppto}, status=200)
+    
+    def create(self, request):
+        try:
+            data = json.loads(request.body)
+        except JSONDecodeError as error:
+            return JsonResponse({'Request error': str(error)},status=400)
+        if "creador" not in data.keys():
+            if 'Authorization' in request.headers:
+                user = get_user_from_usertoken(request.headers['Authorization'])
+                data['creador'] = user.id
+            else:
+                return JsonResponse ({'status_text':'No usaste token'}, status=403)
+        serializer = self.serializer_class(data = data)
+        if serializer.is_valid():
+            serializer.save()
+            proveedor_data = serializer.data
+            response = {'proveedor': proveedor_data}
+            return JsonResponse(response, status=201)
+        return JsonResponse({'status_text': str(serializer.errors)}, status=400)

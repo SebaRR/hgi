@@ -1,5 +1,6 @@
 
 
+from hgi.utils import get_user_from_usertoken
 from hgi_ventas.models import ItemRecurso
 from hgi_ventas.serializer import ItemRecursoSerializer
 from rest_framework.decorators import (
@@ -69,3 +70,25 @@ class ItemRecursoViewSet(viewsets.ModelViewSet):
             return JsonResponse({"status_text": "ItemRecurso editado con exito.", "item_rec": data_item,},status=202)
         else:
             return JsonResponse({"status_text": str(serializer.errors)}, status=400) 
+        
+    def create(self, request):
+
+        try:
+            data = json.loads(request.body)
+        except JSONDecodeError as error:
+            return JsonResponse({'Request error': str(error)},status=400)
+        
+        if 'Authorization' in request.headers:
+            user = get_user_from_usertoken(request.headers['Authorization'])
+        else:
+            return JsonResponse ({'status_text':'No usaste token'}, status=403)
+        
+        if "creador" not in data.keys():
+            data['creador'] = user.id
+        
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            item_rec_data = serializer.data
+            return JsonResponse({"item_rec":item_rec_data}, status=201)
+        return JsonResponse({'status_text':str(serializer.errors)}, status=201)
