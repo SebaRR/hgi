@@ -98,7 +98,6 @@ class Recurso(models.Model):
 class ProdRecurso(models.Model):
 
     total = models.IntegerField()
-    ingresado = models.IntegerField()
 
     partida = models.ForeignKey(Partida, on_delete=models.CASCADE, null=False)
     recurso = models.ForeignKey(Recurso, on_delete=models.CASCADE, null=False)

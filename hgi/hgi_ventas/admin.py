@@ -37,7 +37,7 @@ class RecursoAdmin(admin.ModelAdmin):
         model = Recurso
 
 class ProdRecursoAdmin(admin.ModelAdmin):
-    list_display = ["id", "total", "ingresado"]
+    list_display = ["id", "total"]
     class meta:
         model = ProdRecurso
 

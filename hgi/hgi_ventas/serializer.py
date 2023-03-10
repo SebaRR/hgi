@@ -66,7 +66,11 @@ class ProdRecursoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_disponible(self, instance):
-        total = instance.total - instance.ingresado
+        ingresado = 0
+        items = ItemRecurso.objects.filter(recurso = instance.id)
+        for item in items:
+            ingresado += item.total_precio()
+        total = instance.total - ingresado
         return total
 
     def get_n_items(self, instance):
