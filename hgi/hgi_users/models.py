@@ -29,6 +29,18 @@ class CargoUser(models.Model):
     modificar_oc = models.BooleanField(default=False)
     ver_vb = models.BooleanField(default=False)
     modificar_vb = models.BooleanField(default=False)
+    #Added for
+    ver_contrato = models.BooleanField(default=False)
+    modificar_contrato = models.BooleanField(default=False)
+    ver_ppto = models.BooleanField(default=False)
+    modificar_ppto = models.BooleanField(default=False)
+    mano_obra = models.BooleanField(default=False) #True if can see this type
+    ver_cch = models.BooleanField(default=False)
+    modificar_cch = models.BooleanField(default=False)
+    ver_ccr = models.BooleanField(default=False)
+    modificar_ccr = models.BooleanField(default=False)
+    ver_ccp = models.BooleanField(default=False)
+    modificar_ccp = models.BooleanField(default=False)
 
 class User(AbstractUser):
     type_choices = [
