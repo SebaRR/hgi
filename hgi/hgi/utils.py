@@ -87,41 +87,57 @@ def add_info_oc(oc, oc_data):
 def create_contrato_user_permission(contrato_data):
     permissions = {}
     contrato = Contrato.objects.get(id=contrato_data['id'])
+
     if contrato.responsable.id not in permissions.keys():
+        print("NO -> responsable " + str(contrato.responsable.id))
         permissions[contrato.responsable.id] = [1,]
     else:
+        print("SI -> responsable " + str(contrato.responsable.id))
         permissions[contrato.responsable.id] = permissions[contrato.responsable.id].append(1)
 
     if contrato.administrador.id not in permissions.keys():
+        print("NO -> administrador " + str(contrato.administrador.id))
         permissions[contrato.administrador.id] = [3,]
     else:
+        print("SI -> administrador " + str(contrato.administrador.id))
         permissions[contrato.administrador.id] = permissions[contrato.administrador.id].append(3)
 
     if contrato.visitador.id not in permissions.keys():
+        print("NO -> visitador " + str(contrato.visitador.id))
         permissions[contrato.visitador.id] = [2,]
     else:
+        print("SI -> visitador " + str(contrato.visitador.id))
         permissions[contrato.visitador.id] = permissions[contrato.visitador.id].append(2)
     
     if contrato.of_tecnica.id not in permissions.keys():
+        print("NO -> of_tecnica " + str(contrato.of_tecnica.id))
         permissions[contrato.of_tecnica.id] = [6,]
     else:
+        print("SI -> of_tecnica " + str(contrato.of_tecnica.id))
         permissions[contrato.of_tecnica.id] = permissions[contrato.of_tecnica.id].append(6)
     
     if contrato.compras.id not in permissions.keys():
+        print("NO -> compras " + str(contrato.compras.id))
         permissions[contrato.compras.id] = [5,]
     else:
+        print("SI -> compras " + str(contrato.compras.id))
         permissions[contrato.compras.id] = permissions[contrato.compras.id].append(5)
 
     if contrato.administrativo.id not in permissions.keys():
+        print("NO -> administrativo " + str(contrato.administrativo.id))
         permissions[contrato.administrativo.id] = [7,]
     else:
+        print("SI -> administrativo " + str(contrato.administrativo.id))
         permissions[contrato.administrativo.id] = permissions[contrato.administrativo.id].append(7)
 
     if contrato.prevencionista.id not in permissions.keys():
-        permissions[contrato.prevencionista.id] = [5,]
+        print("NO -> prevencionista " + str(contrato.prevencionista.id))
+        permissions[contrato.prevencionista.id] = [4,]
     else:
-        permissions[contrato.prevencionista.id] = permissions[contrato.prevencionista.id].append(5)
+        print("SI -> prevencionista " + str(contrato.prevencionista.id))
+        permissions[contrato.prevencionista.id] = permissions[contrato.prevencionista.id].append(4)
     
     for key, permission in permissions.items():
         PermisoContratoUser.objects.create(user=key,contrato=contrato.id,permisos=permission)
+
     return
