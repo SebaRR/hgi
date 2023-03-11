@@ -61,6 +61,7 @@ class ProdRecursoSerializer(serializers.ModelSerializer):
     disponible = serializers.SerializerMethodField()
     n_items = serializers.SerializerMethodField()
     contratado = serializers.SerializerMethodField()
+    suma_total = serializers.SerializerMethodField()
 
     class Meta:
         model = ProdRecurso
@@ -78,16 +79,25 @@ class ProdRecursoSerializer(serializers.ModelSerializer):
         return (ItemRecurso.objects.filter(recurso=instance.id)).count()
     
     def get_contratado(self, instance):
-        productos = ProductoOC.objects.filter(partida=instance.partida.id).filter(oc__tipo__id=7).filter(recurso=instance.recurso.id)
+        productos = ItemRecurso.objects.filter(partida=instance.partida.id).filter(oc__tipo__id=7).filter(recurso=instance.recurso.id)
         total_contratado = 0
         for producto in productos:
             total_contratado += producto.total_precio()
         return total_contratado
+    
+    def get_suma_total(self, instance):
+        productos = ItemRecurso.objects.filter(recurso=instance.recurso.id)
+        total = 0
+        for producto in productos:
+            total += producto.total_precio()
+
+
 
 class PartidaSerializer(serializers.ModelSerializer):
     productos = serializers.SerializerMethodField()
     contratado = serializers.SerializerMethodField()
-
+    suma_total = serializers.SerializerMethodField()
+    
     class Meta:
         model = Partida
         fields = '__all__'
@@ -103,7 +113,11 @@ class PartidaSerializer(serializers.ModelSerializer):
             total_contratado += producto.total_precio()
         return total_contratado
 
-
+    def get_suma_total(self, instance):
+        productos = ProductoOC.objects.filter(partida=instance.id)
+        total = 0
+        for producto in productos:
+            total += producto.total_precio()
 
 
 class ItemRecursoSerializer(serializers.ModelSerializer):
