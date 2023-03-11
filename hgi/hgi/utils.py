@@ -143,7 +143,7 @@ def create_contrato_user_permission(contrato_data):
         print("SI -> prevencionista " + str(contrato.prevencionista.id))
         print(permissions[contrato.prevencionista.id])
         permissions[contrato.prevencionista.id].append(4)
-    
+     
     for key, permission in permissions.items():
         PermisoContratoUser.objects.create(user=key,contrato=contrato.id,permisos=permission)
 
