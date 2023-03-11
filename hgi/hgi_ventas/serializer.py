@@ -79,7 +79,7 @@ class ProdRecursoSerializer(serializers.ModelSerializer):
         return (ItemRecurso.objects.filter(recurso=instance.id)).count()
     
     def get_contratado(self, instance):
-        productos = ItemRecurso.objects.filter(partida=instance.partida.id).filter(oc__tipo__id=7).filter(recurso=instance.recurso.id)
+        productos = ItemRecurso.objects.filter(partida=instance.partida.id).filter(recurso=instance.recurso.id)
         total_contratado = 0
         for producto in productos:
             total_contratado += producto.total_precio()
