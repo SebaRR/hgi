@@ -95,7 +95,7 @@ class ProdRecursoSerializer(serializers.ModelSerializer):
 
 
 class PartidaSerializer(serializers.ModelSerializer):
-    productos = serializers.SerializerMethodField()
+    prodrecursos = serializers.SerializerMethodField()
     contratado = serializers.SerializerMethodField()
     suma_total = serializers.SerializerMethodField()
 
@@ -103,7 +103,7 @@ class PartidaSerializer(serializers.ModelSerializer):
         model = Partida
         fields = '__all__'
     
-    def get_productos(self, instance):
+    def get_prodrecursos(self, instance):
         productos = ProdRecurso.objects.filter(partida=instance.id)
         return ProdRecursoSerializer(productos, many=True).data
     
