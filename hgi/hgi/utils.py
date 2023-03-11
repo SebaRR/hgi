@@ -86,7 +86,7 @@ def add_info_oc(oc, oc_data):
 
 def create_contrato_user_permission(contrato_data):
     permissions = {}
-    contrato = Contrato.objects.get(id=contrato_data)
+    contrato = Contrato.objects.get(id=contrato_data['id'])
     if contrato.responsable.id not in permissions.keys():
         permissions[contrato.responsable.id] = [1,]
     else:
