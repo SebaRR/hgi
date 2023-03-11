@@ -60,6 +60,7 @@ class PresupuestoSerializer(serializers.ModelSerializer):
 class ProdRecursoSerializer(serializers.ModelSerializer):
     disponible = serializers.SerializerMethodField()
     n_items = serializers.SerializerMethodField()
+    contratado = serializers.SerializerMethodField()
 
     class Meta:
         model = ProdRecurso
@@ -75,9 +76,17 @@ class ProdRecursoSerializer(serializers.ModelSerializer):
 
     def get_n_items(self, instance):
         return (ItemRecurso.objects.filter(recurso=instance.id)).count()
+    
+    def get_contratado(self, instance):
+        productos = ProductoOC.objects.filter(partida=instance.partida.id).filter(oc__tipo__id=7).filter(recurso=instance.recurso.id)
+        total_contratado = 0
+        for producto in productos:
+            total_contratado += producto.total_precio()
+        return total_contratado
 
 class PartidaSerializer(serializers.ModelSerializer):
     productos = serializers.SerializerMethodField()
+    contratado = serializers.SerializerMethodField()
 
     class Meta:
         model = Partida
@@ -86,6 +95,15 @@ class PartidaSerializer(serializers.ModelSerializer):
     def get_productos(self, instance):
         productos = ProdRecurso.objects.filter(partida=instance.id)
         return ProdRecursoSerializer(productos, many=True).data
+    
+    def get_contratado(self, instance):
+        productos = ProductoOC.objects.filter(partida=instance.id).filter(oc__tipo__id=7)
+        total_contratado = 0
+        for producto in productos:
+            total_contratado += producto.total_precio()
+        return total_contratado
+
+
 
 
 class ItemRecursoSerializer(serializers.ModelSerializer):

@@ -55,6 +55,8 @@ class ContratoViewSet(viewsets.ModelViewSet):
         for contrato in response_data:
             status = EstadoContrato.objects.get(id=contrato['estado'])
             obra = Obra.objects.get(id=contrato['obra'])
+            contrato['codigo_obra'] = obra.codigo
+            contrato['codigo_cliente'] = obra.cliente.code
             contrato['estado_name'] = status.nombre
             contrato['obra_name'] = obra.nombre
         
