@@ -90,6 +90,7 @@ class ProdRecursoSerializer(serializers.ModelSerializer):
         total = 0
         for producto in productos:
             total += producto.total_precio()
+        return total
 
 
 
@@ -97,7 +98,7 @@ class PartidaSerializer(serializers.ModelSerializer):
     productos = serializers.SerializerMethodField()
     contratado = serializers.SerializerMethodField()
     suma_total = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Partida
         fields = '__all__'
@@ -118,6 +119,7 @@ class PartidaSerializer(serializers.ModelSerializer):
         total = 0
         for producto in productos:
             total += producto.total_precio()
+        return total
 
 
 class ItemRecursoSerializer(serializers.ModelSerializer):
