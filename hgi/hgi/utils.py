@@ -1,4 +1,5 @@
 
+from hgi_users.models import User
 from hgi_static.models import PermisoContratoUser
 from hgi_ventas.serializer import PartidaSerializer
 from hgi_ventas.models import Partida
@@ -145,6 +146,7 @@ def create_contrato_user_permission(contrato_data):
         permissions[contrato.prevencionista.id].append(4)
      
     for key, permission in permissions.items():
-        PermisoContratoUser.objects.create(user=key,contrato=contrato.id,permisos=permission)
+        user = User.objects.get(id=key)
+        PermisoContratoUser.objects.create(user=user,contrato=contrato,permisos=permission)
 
     return
