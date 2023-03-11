@@ -1,4 +1,5 @@
  
+from hgi.utils import create_contrato_user_permission
 from hgi.utils import get_user_from_usertoken
 from hgi_ventas.serializer import PresupuestoSerializer
 from hgi_ventas.models import Presupuesto
@@ -77,6 +78,7 @@ class ContratoViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             contrato_data = serializer.data
+            create_contrato_user_permission(contrato_data)
             response = {'contrato': contrato_data}
             return JsonResponse(response, status=201)
         return JsonResponse({'status_text': str(serializer.errors)}, status=400)

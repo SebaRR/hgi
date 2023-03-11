@@ -1,4 +1,5 @@
 
+from hgi_static.models import PermisoContratoUser
 from hgi_ventas.serializer import PartidaSerializer
 from hgi_ventas.models import Partida
 from hgi_ventas.models import ProductoOC
@@ -81,4 +82,46 @@ def add_info_oc(oc, oc_data):
     oc_data['nombre_forma_pago'] = oc.forma_pago.descripcion
     oc_data['nombre_tipo'] = oc.tipo.descripcion
     oc_data['nombre_moneda'] = oc.moneda.simbolo 
+    return
+
+def create_contrato_user_permission(contrato_data):
+    permissions = {}
+    contrato = Contrato.objects.get(id=contrato_data)
+    if contrato.responsable.id not in permissions.keys():
+        permissions[contrato.responsable.id] = [1,]
+    else:
+        permissions[contrato.responsable.id] = permissions[contrato.responsable.id].append(1)
+
+    if contrato.administrador.id not in permissions.keys():
+        permissions[contrato.administrador.id] = [3,]
+    else:
+        permissions[contrato.administrador.id] = permissions[contrato.administrador.id].append(3)
+
+    if contrato.visitador.id not in permissions.keys():
+        permissions[contrato.visitador.id] = [2,]
+    else:
+        permissions[contrato.visitador.id] = permissions[contrato.visitador.id].append(2)
+    
+    if contrato.of_tecnica.id not in permissions.keys():
+        permissions[contrato.of_tecnica.id] = [6,]
+    else:
+        permissions[contrato.of_tecnica.id] = permissions[contrato.of_tecnica.id].append(6)
+    
+    if contrato.compras.id not in permissions.keys():
+        permissions[contrato.compras.id] = [5,]
+    else:
+        permissions[contrato.compras.id] = permissions[contrato.compras.id].append(5)
+
+    if contrato.administrativo.id not in permissions.keys():
+        permissions[contrato.administrativo.id] = [7,]
+    else:
+        permissions[contrato.administrativo.id] = permissions[contrato.administrativo.id].append(7)
+
+    if contrato.prevencionista.id not in permissions.keys():
+        permissions[contrato.prevencionista.id] = [5,]
+    else:
+        permissions[contrato.prevencionista.id] = permissions[contrato.prevencionista.id].append(5)
+    
+    for key, permission in permissions.items():
+        PermisoContratoUser.objects.create(user=key,contrato=contrato.id,permisos=permission)
     return
