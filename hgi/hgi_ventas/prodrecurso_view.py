@@ -1,5 +1,6 @@
 
 
+from hgi_ventas.models import Recurso
 from hgi.utils import get_user_from_usertoken
 from hgi_ventas.serializer import ProdRecursoSerializer
 from hgi_ventas.models import ProdRecurso
@@ -27,6 +28,9 @@ class ProdRecursoViewSet(viewsets.ModelViewSet):
         self.queryset = ProdRecurso.objects.all()
         prod_recurso = self.get_object()
         data_prod_recurso = self.serializer_class(prod_recurso).data
+        recurso = Recurso.objects.get(id=data_prod_recurso['recurso'])
+        data_prod_recurso['codigo_recurso'] = recurso.codigo
+        data_prod_recurso['nombre_recurso'] = recurso.descripcion
         return JsonResponse({"prod_recurso":data_prod_recurso}, status=200)
     
     def get_queryset(self):
@@ -53,7 +57,10 @@ class ProdRecursoViewSet(viewsets.ModelViewSet):
         productos_all = pages.page(out_pag).object_list
         serializer = self.serializer_class(productos_all, many=True)
         response_data = serializer.data
-        
+        for producto in response_data:
+            recurso = Recurso.objects.get(id=producto['recurso'])
+            producto['codigo_recurso'] = recurso.codigo
+            producto['nombre_recurso'] = recurso.descripcion
         return JsonResponse({'total_pages': total_pages, 'total_objects':count_objects, 'actual_page': out_pag, 'objects': response_data}, status=200)
     
     def create(self, request):

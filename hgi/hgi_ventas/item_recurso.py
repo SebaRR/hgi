@@ -1,5 +1,6 @@
 
 
+from hgi_ventas.models import ProdRecurso
 from hgi.utils import get_user_from_usertoken
 from hgi_ventas.models import ItemRecurso
 from hgi_ventas.serializer import ItemRecursoSerializer
@@ -85,7 +86,13 @@ class ItemRecursoViewSet(viewsets.ModelViewSet):
         
         if "creador" not in data.keys():
             data['creador'] = user.id
-        
+
+        prod_recurso = ProdRecurso.objects.get(id=data['recurso'])
+        if "partida" not in data.keys():
+            data['partida'] = prod_recurso.partida.id
+        if "contrato" not in data.keys():
+            data['contrato'] = prod_recurso.partida.contrato.id
+            
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             serializer.save()

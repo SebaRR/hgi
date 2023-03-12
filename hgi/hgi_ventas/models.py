@@ -115,12 +115,12 @@ class ItemRecurso(models.Model):
     precio = models.IntegerField()
     observacion = models.CharField(max_length=500, null=True, blank=True)
     activo = models.BooleanField(default=False)
-    ing = models.IntegerField()
+    ing = models.IntegerField(null=True)
 
     fecha = models.DateTimeField(auto_now_add=True)
     recurso = models.ForeignKey(ProdRecurso, on_delete=models.CASCADE, null=False)
-    partida = models.ForeignKey(Partida, on_delete=models.CASCADE, null=False)
-    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=False)
+    partida = models.ForeignKey(Partida, on_delete=models.CASCADE, null=True)
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, null=True)
     creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     
     def total_precio(self):

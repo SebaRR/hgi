@@ -88,7 +88,7 @@ class UserTokenSerializer(serializers.ModelSerializer):
 class ClientsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ('id', 'business_name', 'address', 'commune', 'activity', 'rut','phone','country','active','contact','region','city',)
+        fields = ('id', 'business_name', 'address', 'commune', 'activity', 'rut','phone','country','active','contact','region','city','code','email',)
         read_only_fields = ('created_at', 'updated_at',)
     
 
