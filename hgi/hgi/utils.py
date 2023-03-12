@@ -126,6 +126,6 @@ def create_contrato_user_permission(contrato_data):
      
     for key, permission in permissions.items():
         user = User.objects.get(id=key)
-        PermisoContratoUser.objects.create(user=user,contrato=contrato.id,permisos=permission)
+        PermisoContratoUser.objects.create(user=user,contrato=contrato,permisos=permission)
 
     return
