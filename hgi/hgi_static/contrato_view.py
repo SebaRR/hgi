@@ -1,4 +1,6 @@
  
+from hgi.utils import register_change
+from hgi.utils import get_changes_list
 from hgi.utils import create_contrato_user_permission
 from hgi.utils import get_user_from_usertoken
 from hgi_ventas.serializer import PresupuestoSerializer
@@ -78,10 +80,30 @@ class ContratoViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             contrato_data = serializer.data
+            register_change(contrato_data["id"],[1,],user,"Contrato")
             create_contrato_user_permission(contrato_data)
             response = {'contrato': contrato_data}
             return JsonResponse(response, status=201)
         return JsonResponse({'status_text': str(serializer.errors)}, status=400)
+    
+    def partial_update(self, request, pk, *args, **kwargs):
+        self.queryset = Contrato.objects.all()
+        producto = self.get_object()
+
+        if 'Authorization' in request.headers:
+            user = get_user_from_usertoken(request.headers['Authorization'])
+        else:
+            return JsonResponse ({'status_text':'No usaste token'}, status=403)
+        
+        serializer = self.serializer_class(producto, data=request.data, partial=True)
+        changes = get_changes_list(request.data)
+        if serializer.is_valid():
+            serializer.save()
+            contrato_data = serializer.data
+            register_change(contrato_data["id"],changes,user,"Contrato")
+            return JsonResponse({"status_text": "Contrato editado con exito.", "contrato": contrato_data,},status=202)
+        else:
+            return JsonResponse({"status_text": str(serializer.errors)}, status=400)
     
     def destroy(self, request, *args, **kwargs):
         self.queryset = Contrato.objects.all()

@@ -1,4 +1,5 @@
 
+from hgi_static.models import GestionCambios
 from hgi_users.models import User
 from hgi_static.models import PermisoContratoUser
 from hgi_ventas.serializer import PartidaSerializer
@@ -128,4 +129,40 @@ def create_contrato_user_permission(contrato_data):
         user = User.objects.get(id=key)
         PermisoContratoUser.objects.create(user=user,contrato=contrato,permisos=permission)
 
+    return
+
+def get_changes_list(data):
+    changes = []
+    
+    if "nombre" in data.keys():
+        changes.append(2)
+    if "codigo" in data.keys():
+        changes.append(3)
+    if "direccion" in data.keys():
+        changes.append(4)
+    if "estado" in data.keys():
+        changes.append(5)
+    if "tipo" in data.keys():
+        changes.append(6)
+    if "clasificacion" in data.keys():
+        changes.append(7)
+    if "obra" in data.keys():
+        changes.append(8)
+
+    return changes
+
+def register_change(id,change_types,user,changed_model):
+    types = {
+        1: "Objeto Creado",
+        2: "Objeto Editado (Nombre)",
+        3: "Objeto Editado (Codigo)",
+        4: "Objeto Editado (Direccion)",
+        5: "Objeto Editado (Estado)",
+        6: "Objeto Editado (Tipo)",
+        7: "Objeto Editado (Clasificacion)",
+        8: "Objeto Editado (Obra)",
+    }
+    for change_type in change_types:
+        GestionCambios.objects.create(type_model=changed_model, obj_id=id, accion=types[change_type], user=user)
+    
     return

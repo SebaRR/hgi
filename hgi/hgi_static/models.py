@@ -136,5 +136,6 @@ class GestionCambios(models.Model):
     
     type_model = models.CharField(max_length=20,choices=model_choices, null=True)
     obj_id = models.IntegerField()
+    accion = models.CharField(max_length=200, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     fecha = models.DateTimeField(auto_now_add=True, null=False)
