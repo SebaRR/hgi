@@ -119,5 +119,22 @@ class PermisoContratoUser(models.Model):
     contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True)
     permisos = ArrayField(models.IntegerField(null=True), default=list)
 
-#tabla de registro de cambios de estado en un contrato 
-
+class GestionCambios(models.Model):
+    model_choices = [
+        ('Contrato', 'Contrato'),
+        ('Obra', 'Obra'),
+        ('Oc', 'OC'),
+        ('Cliente', 'Cliente'),
+        ('Proveedor', 'Proveedor'),
+        ('CajaChica', 'CajaChica'),
+        ('Presupuesto', 'Presupuesto'),
+        ('ProdRecurso', 'ProdRecurso'),
+        ('ItemCC', 'ItemCC'),
+        ('ItemRecurso', 'ItemRecurso'),
+        ('ProductoOc', 'ProductoOc'),
+        ]
+    
+    type_model = models.CharField(max_length=20,choices=model_choices, null=True)
+    obj_id = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
+    fecha = models.DateTimeField(auto_now_add=True, null=False)

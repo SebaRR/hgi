@@ -1,4 +1,5 @@
 
+from hgi_static.models import GestionCambios
 from hgi_static.models import PermisoContratoUser
 from hgi_ventas.models import ProductoOC
 from hgi_ventas.models import Presupuesto, Partida
@@ -120,4 +121,10 @@ class EstadoOCSerializer(serializers.ModelSerializer):
 class PermisoContratoUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = PermisoContratoUser
+        fields = '__all__'
+
+
+class GestionCambiosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GestionCambios
         fields = '__all__'
