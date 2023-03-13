@@ -1,4 +1,6 @@
 
+from hgi.utils import get_changes_list
+from hgi.utils import register_change
 from hgi_ventas.models import ProductoOC
 from hgi.utils import add_info_oc
 from hgi_static.serializer import ContratoSerializer
@@ -121,6 +123,7 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             oc_serializer = serializer.data
+            register_change(oc_serializer["id"],[1,],user,"Oc")
             return JsonResponse({"oc":oc_serializer}, status=201)
         return JsonResponse({'status_text':str(serializer.errors)}, status=201)
 
@@ -185,9 +188,12 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
             else:
                 return JsonResponse ({'status_text':'No tienes autorización para realizar esta acción.'}, status=403)
         else:
+            changes = get_changes_list(request.data)
             serializer = OrdenCompraSerializer(oc, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
+                oc_data = serializer.data
+                register_change(oc_data["id"],changes,user,"Oc")
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
             else:
                 return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
