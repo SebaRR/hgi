@@ -133,7 +133,7 @@ def create_contrato_user_permission(contrato_data):
 
 def get_changes_list(data):
     changes = []
-    
+
     if "nombre" in data.keys():
         changes.append(2)
     if "codigo" in data.keys():
@@ -148,6 +148,10 @@ def get_changes_list(data):
         changes.append(7)
     if "obra" in data.keys():
         changes.append(8)
+    if "glosa" in data.keys():
+        changes.append(9)
+    if "observacion" in data.keys():
+        changes.append(10)
 
     return changes
 
@@ -161,6 +165,8 @@ def register_change(id,change_types,user,changed_model):
         6: "Objeto Editado (Tipo)",
         7: "Objeto Editado (Clasificacion)",
         8: "Objeto Editado (Obra)",
+        9: "Objeto Editado (Glosa)",
+        10: "Objeto Editado (Observacion)",
     }
     for change_type in change_types:
         GestionCambios.objects.create(type_model=changed_model, obj_id=id, accion=types[change_type], user=user)
