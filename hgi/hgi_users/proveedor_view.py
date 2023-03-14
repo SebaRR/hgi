@@ -1,6 +1,6 @@
 
 
-from hgi.hgi.utils import get_changes_list
+from hgi.utils import get_changes_list
 from hgi.utils import register_change
 from hgi.utils import get_user_from_usertoken
 from hgi_users.models import Proveedor
