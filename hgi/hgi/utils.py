@@ -186,7 +186,7 @@ def get_changes_list(data):
         changes.append(20)
     if "banco" in data.keys():
         changes.append(21)
-    return changes
+    return changes 
 
 def register_change(id,change_types,user,changed_model):
     types = {
