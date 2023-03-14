@@ -33,12 +33,14 @@ class TipoPagoViewSet(viewsets.ModelViewSet):
             data = json.loads(request.body)
         except JSONDecodeError as error:
             return JsonResponse({'Request error': str(error)},status=400)
-        if "creador" not in data.keys():
-            if 'Authorization' in request.headers:
-                user = get_user_from_usertoken(request.headers['Authorization'])
+        
+        if 'Authorization' in request.headers:
+            user = get_user_from_usertoken(request.headers['Authorization'])
+            if "creador" not in data.keys():
                 data['creador'] = user.id
-            else:
-                return JsonResponse ({'status_text':'No usaste token'}, status=403)
+        else:
+            return JsonResponse ({'status_text':'No usaste token'}, status=403)
+        
         serializer = self.serializer_class(data = data)
         if serializer.is_valid():
             serializer.save()
