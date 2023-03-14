@@ -144,6 +144,8 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
                     serializer = OrdenCompraSerializer(oc, data={"autorizacion_adm": True, "autorizacion_res": True, "estado": 7}, partial=True)
                     if serializer.is_valid():
                         serializer.save()
+                        oc_data = serializer.data
+                        register_change(oc_data["id"],[11,12,],user,"Oc")
                         return Response({'oc_data':serializer.data,'products':list_produtcs}, status=status.HTTP_202_ACCEPTED)
                     else:
                         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -161,6 +163,8 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
                     if serializer.is_valid():
                         serializer.save()
                         oc_data = serializer.data
+                        register_change(oc_data["id"],[11,],user,"Oc")
+                        oc_data = serializer.data
                         return Response({'oc_data':oc_data,'products':list_produtcs}, status=status.HTTP_202_ACCEPTED)
                     else:
                         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -172,13 +176,15 @@ class OrdenCompraViewSet(viewsets.ModelViewSet):
             if contrato.responsable.id == user.id:
                 if can_accept:
                     if oc.autorizacion_adm:
-                        serializer = OrdenCompraSerializer(oc, data={"autorizacion_adm": True, "estado": 7}, partial=True)
+                        serializer = OrdenCompraSerializer(oc, data={"autorizacion_res": True, "estado": 7}, partial=True)
                         accepted = True
                     else:
                         serializer = OrdenCompraSerializer(oc, data={"autorizacion_res": True}, partial=True)
                         accepted = False
                     if serializer.is_valid():
                         serializer.save()
+                        oc_data = serializer.data
+                        register_change(oc_data["id"],[12,],user,"Oc")
                         oc_data = serializer.data
                         return Response({'oc_data':oc_data,'products':list_produtcs}, status=status.HTTP_202_ACCEPTED)
                     else:

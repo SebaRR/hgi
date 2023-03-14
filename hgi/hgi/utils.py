@@ -136,9 +136,15 @@ def get_changes_list(data):
 
     if "nombre" in data.keys():
         changes.append(2)
+    if "business_name" in data.keys():
+        changes.append(2)
     if "codigo" in data.keys():
         changes.append(3)
+    if "code" in data.keys():
+        changes.append(3)
     if "direccion" in data.keys():
+        changes.append(4)
+    if "address" in data.keys():
         changes.append(4)
     if "estado" in data.keys():
         changes.append(5)
@@ -152,21 +158,59 @@ def get_changes_list(data):
         changes.append(9)
     if "observacion" in data.keys():
         changes.append(10)
-
+    if "auto_a" in data.keys():
+        changes.append(11)
+    if "auto_r" in data.keys():
+        changes.append(12)
+    if "activity" in data.keys():
+        changes.append(13)
+    if "rut" in data.keys():
+        changes.append(14)
+    if "phone" in data.keys():
+        changes.append(15)
+    if "telefono" in data.keys():
+        changes.append(15)
+    if "email" in data.keys():
+        changes.append(16)
+    if "mail_contacto" in data.keys():
+        changes.append(16)
+    if "contact" in data.keys():
+        changes.append(17)
+    if "contacto" in data.keys():
+        changes.append(17)
+    if "rs" in data.keys():
+        changes.append(18)
+    if "credito" in data.keys():
+        changes.append(19)
+    if "cuenta" in data.keys():
+        changes.append(20)
+    if "banco" in data.keys():
+        changes.append(21)
     return changes
 
 def register_change(id,change_types,user,changed_model):
     types = {
         1: "Objeto Creado",
         2: "Objeto Editado (Nombre)",
-        3: "Objeto Editado (Codigo)",
-        4: "Objeto Editado (Direccion)",
+        3: "Objeto Editado (Código)",
+        4: "Objeto Editado (Dirección)",
         5: "Objeto Editado (Estado)",
         6: "Objeto Editado (Tipo)",
-        7: "Objeto Editado (Clasificacion)",
+        7: "Objeto Editado (Clasificación)",
         8: "Objeto Editado (Obra)",
         9: "Objeto Editado (Glosa)",
-        10: "Objeto Editado (Observacion)",
+        10: "Objeto Editado (Observación)",
+        11: "Orden de Compra Autorizada (A)",
+        12: "Orden de Compra Autorizada (R)",
+        13: "Objeto Editado (Actividad)",
+        14: "Objeto Editado (Rut)",
+        15: "Objeto Editado (Teléfono)",
+        16: "Objeto Editado (Email)",
+        17: "Objeto Editado (Contacto)",
+        18: "Objeto Editado (Razón Social)",
+        19: "Objeto Editado (Crédito)",
+        20: "Objeto Editado (Cuenta)",
+        21: "Objeto Editado (Banco)",
     }
     for change_type in change_types:
         GestionCambios.objects.create(type_model=changed_model, obj_id=id, accion=types[change_type], user=user)

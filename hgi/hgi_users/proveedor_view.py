@@ -1,5 +1,7 @@
 
 
+from hgi.hgi.utils import get_changes_list
+from hgi.utils import register_change
 from hgi.utils import get_user_from_usertoken
 from hgi_users.models import Proveedor
 from hgi_users.serializer import ProveedorSerializer
@@ -44,6 +46,26 @@ class ProveedorViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             proveedor_data = serializer.data
+            register_change(proveedor_data["id"],[1,],user,"Proveedor")
             response = {'proveedor': proveedor_data}
             return JsonResponse(response, status=201)
         return JsonResponse({'status_text': str(serializer.errors)}, status=400)
+    
+    def partial_update(self, request, pk, *args, **kwargs):
+        self.queryset = Proveedor.objects.all()
+        proveedor = self.get_object()
+
+        if 'Authorization' in request.headers:
+            user = get_user_from_usertoken(request.headers['Authorization'])
+        else:
+            return JsonResponse ({'status_text':'No usaste token'}, status=403)
+        
+        serializer = self.serializer_class(proveedor, data=request.data, partial=True)
+        changes = get_changes_list(request.data)
+        if serializer.is_valid():
+            serializer.save()
+            proveedor_data = serializer.data
+            register_change(proveedor_data["id"],changes,user,"Proveedor")
+            return JsonResponse({"status_text": "Proveedor editado con exito.", "proveedor": proveedor_data,},status=202)
+        else:
+            return JsonResponse({"status_text": str(serializer.errors)}, status=400)

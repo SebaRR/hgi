@@ -75,20 +75,20 @@ class ObraViewSet(viewsets.ModelViewSet):
     
     def partial_update(self, request, pk, *args, **kwargs):
         self.queryset = Obra.objects.all()
-        producto = self.get_object()
+        obra = self.get_object()
 
         if 'Authorization' in request.headers:
             user = get_user_from_usertoken(request.headers['Authorization'])
         else:
             return JsonResponse ({'status_text':'No usaste token'}, status=403)
         
-        serializer = self.serializer_class(producto, data=request.data, partial=True)
+        serializer = self.serializer_class(obra, data=request.data, partial=True)
         changes = get_changes_list(request.data)
         if serializer.is_valid():
             serializer.save()
             obra_data = serializer.data
             register_change(obra_data["id"],changes,user,"Obra")
-            return JsonResponse({"status_text": "Obra editado con exito.", "obra": obra_data,},status=202)
+            return JsonResponse({"status_text": "Obra editada con exito.", "obra": obra_data,},status=202)
         else:
             return JsonResponse({"status_text": str(serializer.errors)}, status=400)
         
