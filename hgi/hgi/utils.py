@@ -63,7 +63,7 @@ def can_accept_oc(oc):
             can = False
     return can, part_dict
 
-
+ 
 def get_total_partidas_APU(partidas):
     partidas = PartidaSerializer(partidas, many=True).data
     total_partidas = 0
