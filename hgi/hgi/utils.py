@@ -48,7 +48,7 @@ def can_accept_oc(oc):
             data['new_balance'] = data['balance'] - data['total_oc']
             part_dict[partida.id] = data
         else:
-            productos = ProductoOC.objects.filter(partida=partida['id'])
+            productos = ProductoOC.objects.filter(partida=partida.id)
             partida_ingresado = 0
             for producto in productos:
                 partida_ingresado += producto.total_precio()
