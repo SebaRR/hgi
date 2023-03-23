@@ -38,7 +38,6 @@ class ObraViewSet(viewsets.ModelViewSet):
             queryset = Obra.objects.filter(empresa=user.empresa)
         else:
             queryset = Obra.objects.all()
-        print(user.empresa.id)
         obras = queryset
 
         if 'empresa' in self.request.query_params.keys():

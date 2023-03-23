@@ -37,9 +37,13 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
         data_caja['nombre_contrato'] = caja.contrato.nombre
         return JsonResponse({"caja_chica":data_caja}, status=200)
     
-    def get_queryset(self):
-        self.get_queryset = CajaChica.objects.all()
-        cajas = self.queryset
+    def get_queryset(self, user):
+        if user.empresa is not None:
+            queryset = CajaChica.objects.filter(empresa=user.empresa)
+        else:
+            queryset = CajaChica.objects.all()
+        cajas = queryset
+        
 
         if 'contrato' in self.request.query_params.keys():
             contrato = self.request.query_params['contrato']
@@ -56,7 +60,8 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
         return cajas
 
     def list(self, request):
-        cajas = self.get_queryset()
+        user = get_user_from_usertoken(request.headers["Authorization"])
+        cajas = self.get_queryset(user)
         pages = Paginator(cajas.order_by('fecha').reverse(), 99999)
         out_pag = 1
         total_pages = pages.num_pages
