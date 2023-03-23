@@ -39,7 +39,7 @@ class ObraViewSet(viewsets.ModelViewSet):
 
         if 'empresa' in self.request.query_params.keys():
             empresa = self.request.query_params['empresa']
-            obras = obras.filter(empresa = empresa)
+            obras = obras.filter(empresa = empresa) 
         
         return obras
     
