@@ -34,10 +34,13 @@ class ObraViewSet(viewsets.ModelViewSet):
         return JsonResponse({"obra":data_obra}, status=200)
     
     def get_queryset(self, user):
-        self.get_queryset = Obra.objects.filter(empresa=user.empresa)
-        print(user)
+        if user.empresa is not None:
+            self.get_queryset = Obra.objects.filter(empresa=user.empresa)
+        else:
+            self.get_queryset = Obra.objects.all()
+        print(user.empresa.id)
         obras = self.queryset
-    
+
         if 'empresa' in self.request.query_params.keys():
             empresa = self.request.query_params['empresa']
             obras = obras.filter(empresa = empresa) 
