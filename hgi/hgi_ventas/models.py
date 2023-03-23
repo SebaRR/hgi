@@ -1,4 +1,5 @@
 from django.db import models
+from hgi_users.models import Empresa
 from hgi_static.models import Contrato, TipoPresupuesto, TipoPago, Moneda, EstadoOC
 from hgi_users.models import User, Proveedor
 
@@ -177,6 +178,7 @@ class CajaChica(models.Model):
     creador = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     contrato = models.ForeignKey(Contrato, on_delete=models.SET_DEFAULT, default=1, null=False)
     oc = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE, null=True)
+    empresa = models.ForeignKey(Empresa, on_delete=models.SET_NULL, null=True, blank=True)
 
 
 class TipoDocumento(models.Model):

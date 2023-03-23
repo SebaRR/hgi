@@ -1,4 +1,5 @@
 
+from hgi_users.models import Empresa
 from hgi_static.serializer import PermisoContratoUserSerializer
 from hgi_static.models import PermisoContratoUser
 from hgi_users.models import PermisoContrato
@@ -121,3 +122,8 @@ class CargoUserSerializer(serializers.ModelSerializer):
         model = CargoUser
         fields = '__all__'
 
+
+class EmpresaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Empresa
+        fields = '__all__'

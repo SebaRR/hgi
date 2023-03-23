@@ -141,7 +141,7 @@ def logout_v1(request):
 @csrf_exempt
 @api_view(["GET"])
 def load_user(request):
-    token = request.headers["Authorization"].replace("Token ", "")
+    token = request.headers["Authorization"]
     user = get_user_from_usertoken(token)
     if user:
         serializer = UserSerializer(user)

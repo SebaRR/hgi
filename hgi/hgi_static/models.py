@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.db import models
+from hgi_users.models import Empresa
 
 from hgi_users.models import Client, User
 from django.contrib.postgres.fields import ArrayField
@@ -24,6 +25,7 @@ class Obra(models.Model):
     creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
     cliente = models.ForeignKey(Client, on_delete=models.CASCADE, null=False)
     #estado = models.ForeignKey(EstadoObra, on_delete=models.CASCADE, null=False)
+    empresa = models.ForeignKey(Empresa, on_delete=models.SET_NULL, null=True, blank=True)
     fecha = models.DateTimeField(auto_now_add=True, null=True)
 
 
@@ -78,7 +80,8 @@ class Contrato(models.Model):
     administrativo = models.ForeignKey(User, related_name='user_administrativo', on_delete=models.CASCADE, null=False)
     prevencionista = models.ForeignKey(User, related_name='user_prevencionista', on_delete=models.CASCADE, null=False)
     creador = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, null=False)
-
+    empresa = models.ForeignKey(Empresa, on_delete=models.SET_NULL, null=True, blank=True)
+    
     inicio = models.DateTimeField(auto_now_add=True, null=False)
     termino = models.DateTimeField(null=True)
     
