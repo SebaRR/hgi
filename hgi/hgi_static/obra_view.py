@@ -37,7 +37,7 @@ class ObraViewSet(viewsets.ModelViewSet):
         self.get_queryset = Obra.objects.filter(empresa=user.empresa)
         print(user)
         obras = self.queryset
-
+    
         if 'empresa' in self.request.query_params.keys():
             empresa = self.request.query_params['empresa']
             obras = obras.filter(empresa = empresa) 
