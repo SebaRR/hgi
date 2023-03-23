@@ -35,11 +35,11 @@ class ObraViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self, user):
         if user.empresa is not None:
-            self.get_queryset = Obra.objects.filter(empresa=user.empresa)
+            queryset = Obra.objects.filter(empresa=user.empresa)
         else:
-            self.get_queryset = Obra.objects.all()
+            queryset = Obra.objects.all()
         print(user.empresa.id)
-        obras = self.queryset
+        obras = queryset
 
         if 'empresa' in self.request.query_params.keys():
             empresa = self.request.query_params['empresa']
