@@ -40,6 +40,15 @@ class UserViewSet(viewsets.ModelViewSet):
             data_user["cargo"] = cargo_user
         return JsonResponse({"user":data_user}, status=200)
 
+    def get_queryset(self):
+        self.get_queryset = User.objects.all()
+        users = self.queryset
+
+        if 'empresa' in self.request.query_params.keys():
+            empresa = self.request.query_params['empresa']
+            users = users.filter(empresa = empresa)
+        
+        return users
 
     def partial_update(self, request, pk, *args, **kwargs):
         self.queryset = User.objects.all()

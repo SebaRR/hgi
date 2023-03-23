@@ -49,6 +49,10 @@ class CajaChicaViewSet(viewsets.ModelViewSet):
             oc = self.request.query_params['oc']
             cajas = cajas.filter(oc = oc)
             
+        if 'empresa' in self.request.query_params.keys():
+            empresa = self.request.query_params['empresa']
+            cajas = cajas.filter(empresa = empresa)
+
         return cajas
 
     def list(self, request):

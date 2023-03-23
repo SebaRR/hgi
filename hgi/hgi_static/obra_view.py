@@ -33,6 +33,16 @@ class ObraViewSet(viewsets.ModelViewSet):
         data_obra['client_name'] = client.business_name
         return JsonResponse({"obra":data_obra}, status=200)
     
+    def get_queryset(self):
+        self.get_queryset = Obra.objects.all()
+        obras = self.queryset
+
+        if 'empresa' in self.request.query_params.keys():
+            empresa = self.request.query_params['empresa']
+            obras = obras.filter(empresa = empresa)
+        
+        return obras
+    
     def list(self, request):
         obras = self.get_queryset()
         pages = Paginator(obras.order_by('fecha').reverse(), 99999)

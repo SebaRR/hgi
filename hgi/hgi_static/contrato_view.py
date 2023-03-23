@@ -41,6 +41,16 @@ class ContratoViewSet(viewsets.ModelViewSet):
         data_contrato['obra_name'] = obra.nombre
         return JsonResponse({"contrato":data_contrato}, status=200)
     
+    def get_queryset(self):
+        self.get_queryset = Contrato.objects.all()
+        contratos = self.queryset
+
+        if 'empresa' in self.request.query_params.keys():
+            empresa = self.request.query_params['empresa']
+            contratos = contratos.filter(empresa = empresa)
+        
+        return contratos
+    
     def list(self, request):
         contratos = self.get_queryset()
         pages = Paginator(contratos.order_by('inicio').reverse(), 25)
