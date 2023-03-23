@@ -137,12 +137,18 @@ class EstadoCajaChicaSerializer(serializers.ModelSerializer):
 
 
 class CajaChicaSerializer(serializers.ModelSerializer):
+    name_empresa = serializers.SerializerMethodField()
 
     class Meta:
         model = CajaChica
         fields = '__all__'
 
-
+    def get_name_empresa(self, instance):
+        if instance.empresa is not None:
+            return instance.empresa.nombre
+        else:
+            return "Empresa Eliminada"
+        
 class TipoDocumentoSerializer(serializers.ModelSerializer):
 
     class Meta:

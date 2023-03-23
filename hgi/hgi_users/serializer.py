@@ -51,12 +51,13 @@ class CreateUserSerializer(FlexFieldsModelSerializer):
 class UserSerializer(FlexFieldsModelSerializer):
     password = serializers.CharField(write_only=True)
     permiso_contrato = serializers.SerializerMethodField()
+    name_empresa = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'is_superuser', 'position',
                   'first_name', 'first_last_name', 'second_last_name','active',
-                  'password', 'created_at', 'updated_at', 'phone_number', 'rut', 'codigo', 'permiso_contrato')
+                  'password', 'created_at', 'updated_at', 'phone_number', 'rut', 'codigo', 'permiso_contrato', 'name_empresa')
         read_only_fields = ('created_at', 'updated_at',)
     
     def get_token(self):
@@ -78,6 +79,11 @@ class UserSerializer(FlexFieldsModelSerializer):
             permiso_contrato_user[permiso["contrato"]] = permiso_contrato
         return permiso_contrato_user
 
+    def get_name_empresa(self, instance):
+        if instance.empresa is not None:
+            return instance.empresa.nombre
+        else:
+            return "Empresa Eliminada"
 
 
 class UserTokenSerializer(serializers.ModelSerializer):

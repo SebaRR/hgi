@@ -14,6 +14,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     total_partidas = serializers.SerializerMethodField()
     n_partidas = serializers.SerializerMethodField()
     total_apu = serializers.SerializerMethodField()
+    name_empresa = serializers.SerializerMethodField()
 
     class Meta:
         model = Contrato
@@ -68,12 +69,24 @@ class ContratoSerializer(serializers.ModelSerializer):
             return total
         return total
         
-
+    def get_name_empresa(self, instance):
+        if instance.empresa is not None:
+            return instance.empresa.nombre
+        else:
+            return "Empresa Eliminada"
 
 class ObraSerializer(serializers.ModelSerializer):
+    name_empresa = serializers.SerializerMethodField()
+
     class Meta:
         model = Obra
         fields = '__all__'
+    
+    def get_name_empresa(self, instance):
+        if instance.empresa is not None:
+            return instance.empresa.nombre
+        else:
+            return "Empresa Eliminada"
     
 
 class TipoPresupuestoSerializer(serializers.ModelSerializer):
