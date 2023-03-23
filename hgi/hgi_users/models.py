@@ -1,6 +1,13 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+class Empresa(models.Model):
+
+    nombre = models.CharField(max_length=50, null=False)
+    rut = models.CharField(max_length=15, null=False)
+    codigo = models.CharField(max_length=20, null=True, blank=True)
+
+    fecha_creado = models.DateTimeField(auto_now_add=True)
 
 class PermisoContrato(models.Model):
 
@@ -29,7 +36,7 @@ class CargoUser(models.Model):
     modificar_oc = models.BooleanField(default=False)
     ver_vb = models.BooleanField(default=False)
     modificar_vb = models.BooleanField(default=False)
-    #Added for
+    
     ver_contrato = models.BooleanField(default=False)
     modificar_contrato = models.BooleanField(default=False)
     ver_ppto = models.BooleanField(default=False)
@@ -61,6 +68,7 @@ class User(AbstractUser):
     #Datos de empleado
     codigo = models.CharField(max_length=20, null=True, blank=True)
     position = models.ForeignKey(CargoUser, on_delete=models.SET_NULL, null=True)
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=True, blank=True)
 
     updated_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -70,6 +78,12 @@ class User(AbstractUser):
             return self.first_name + " " + self.first_last_name
         else:
             return self.first_name
+    
+    def empresa_name(self):
+        if self.empresa is not None:
+            return self.empresa.nombre
+        else:
+            return "Empresa Eliminada"
 
 
 class UserToken(models.Model):
