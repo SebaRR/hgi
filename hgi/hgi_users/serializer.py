@@ -48,16 +48,22 @@ class CreateUserSerializer(FlexFieldsModelSerializer):
         Token.objects.filter(user=self.instance).delete()
    
 
+class CargoUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CargoUser
+        fields = '__all__'
+
+
 class UserSerializer(FlexFieldsModelSerializer):
     password = serializers.CharField(write_only=True)
     permiso_contrato = serializers.SerializerMethodField()
     name_empresa = serializers.SerializerMethodField()
-
+    cargo_user = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'is_superuser', 'position',
                   'first_name', 'first_last_name', 'second_last_name','active',
-                  'password', 'created_at', 'updated_at', 'phone_number', 'rut', 'codigo', 'permiso_contrato', 'name_empresa')
+                  'password', 'created_at', 'updated_at', 'phone_number', 'rut', 'codigo', 'permiso_contrato', 'name_empresa', 'cargo_user')
         read_only_fields = ('created_at', 'updated_at',)
     
     def get_token(self):
@@ -84,6 +90,13 @@ class UserSerializer(FlexFieldsModelSerializer):
             return instance.empresa.nombre
         else:
             return "Empresa Eliminada"
+    
+    def get_cargo_user(self, instance):
+        if instance.position is not None:
+            return CargoUserSerializer(instance.position).data
+        else:
+            return {}
+
 
 
 class UserTokenSerializer(serializers.ModelSerializer):
@@ -120,12 +133,6 @@ class CitySerializer(serializers.ModelSerializer):
 class ProveedorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Proveedor
-        fields = '__all__'
-
-
-class CargoUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CargoUser
         fields = '__all__'
 
 
