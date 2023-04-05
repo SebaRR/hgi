@@ -1,4 +1,5 @@
  
+from hgi.hgi_users.models import User
 from hgi.utils import register_change
 from hgi.utils import get_changes_list
 from hgi.utils import create_contrato_user_permission
@@ -89,6 +90,10 @@ class ContratoViewSet(viewsets.ModelViewSet):
             user = get_user_from_usertoken(request.headers['Authorization'])
             if "creador" not in data.keys():
                 data['creador'] = user.id
+                data['empresa'] = user.empresa.id
+            else:
+                user_creador = User.objects.get(id=data['creador'])
+                data['empresa'] = user_creador.empresa.id
         else:
             return JsonResponse ({'status_text':'No usaste token'}, status=403)
         
