@@ -81,11 +81,11 @@ def register(request):
     try:
         data = json.loads(request.body)
     except JSONDecodeError as error:
-        return JsonResponse({
-                "status_text": "Error parsing body: maybe a trailing comma?",
-                "error": str(error),
-            },status=400,)
-
+        return JsonResponse({"status_text": "Request error","error": str(error),},status=400,)
+    token = request.headers["Authorization"]
+    user = get_user_from_usertoken(token)
+    if user.empresa is not None:
+        data['empresa'] = user.empresa.id
     data["email"] = data["email"].lower()
     serializer = CreateUserSerializer(data=data)
     if serializer.is_valid():
