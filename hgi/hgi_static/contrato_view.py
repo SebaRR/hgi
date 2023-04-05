@@ -1,5 +1,5 @@
  
-from hgi.hgi_users.models import User
+from hgi_users.models import User
 from hgi.utils import register_change
 from hgi.utils import get_changes_list
 from hgi.utils import create_contrato_user_permission
