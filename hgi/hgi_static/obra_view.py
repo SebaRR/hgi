@@ -33,11 +33,8 @@ class ObraViewSet(viewsets.ModelViewSet):
         data_obra['client_name'] = client.business_name
         return JsonResponse({"obra":data_obra}, status=200)
     
-    def get_queryset(self, user):
-        if user.empresa is not None:
-            queryset = Obra.objects.filter(empresa=user.empresa)
-        else:
-            queryset = Obra.objects.all()
+    def get_queryset(self):
+        queryset = Obra.objects.all()
         obras = queryset
 
         if 'empresa' in self.request.query_params.keys():
@@ -48,7 +45,9 @@ class ObraViewSet(viewsets.ModelViewSet):
     
     def list(self, request):
         user = get_user_from_usertoken(request.headers["Authorization"])
-        obras = self.get_queryset(user)
+        obras = self.get_queryset()
+        if user.empresa is not None:
+            obras = obras.filter(empresa=user.empresa)
         pages = Paginator(obras.order_by('fecha').reverse(), 99999)
         out_pag = 1
         total_pages = pages.num_pages
